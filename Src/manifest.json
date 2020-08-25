@@ -1,0 +1,19 @@
+{
+  "name": "Teacrypt",
+  "description": "mydescription",
+  "version": "2.0",
+  "permissions": ["activeTab"],
+  "browser_action": {
+    "default_title": "Teacrypt",
+    "default_icon": "logo.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["background.js"],
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": ["content.js"],
+  "manifest_version": 2
+}
