@@ -10,13 +10,13 @@ HTMLDivElement.prototype.addEventListener = function (a, b, c) {
   this.lastListenerInfo.push({ type: a, fn: b, thirdEventParam: c });
 };
 
-let textbox = document.getElementById("cke_1_contents");
+let textbox;
 
 setTimeout(hookTextbox, 10);
 
 function hookTextbox() {
   if (!textbox) {
-    textbox = document.getElementById("cke_1_contents");
+    textbox = document.querySelector(".ts-edit-box >:nth-child(3)>*>:nth-child(2)>*");
     setTimeout(hookTextbox, 10);
   } else {
     writeIntoTextbox();
@@ -25,7 +25,6 @@ function hookTextbox() {
 
 function writeIntoTextbox() {
   console.log("starting mission");
-  textbox = textbox.children[0];
   let listener = textbox.lastListenerInfo.find((item) => item.type === "keydown");
   if (!listener) {
     console.error("no listener found - aborting mission");
