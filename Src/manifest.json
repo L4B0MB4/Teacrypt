@@ -14,6 +14,6 @@
       "all_frames": true
     }
   ],
-  "web_accessible_resources": ["content.js"],
+  "web_accessible_resources": ["content.js", "aes.js", "aes_helper.js"],
   "manifest_version": 2
 }

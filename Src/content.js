@@ -24,6 +24,7 @@ function hookTextbox() {
 }
 
 function writeIntoTextbox() {
+  test();
   console.log("starting mission");
   let listener = textbox.lastListenerInfo.find((item) => item.type === "keydown");
   if (!listener) {
@@ -40,4 +41,12 @@ function writeIntoTextbox() {
     }
     listener(e);
   });
+}
+
+function test() {
+  var keyIv = window.generateKeyAndIV();
+  var keyIVObj = window.splitKeyAndIV(keyIv);
+  var encryptedText = window.encrypt("My AES encrypt-decrypt is working with padding!!!", keyIVObj.key, keyIVObj.iv);
+  var decryptedText = window.decrypt(encryptedText, keyIVObj.key, keyIVObj.iv);
+  console.log(encryptedText, decryptedText);
 }
