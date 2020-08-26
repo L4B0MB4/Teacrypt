@@ -1,7 +1,7 @@
-import * as aes from './aes';
+import './aes';
+
 import * as aesHelper from './aes_helper';
 
-console.log(aes, aesHelper);
 console.log("nice");
 
 console.log("Trying to hook teams");
