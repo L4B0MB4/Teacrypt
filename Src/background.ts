@@ -6,4 +6,4 @@ function injectScript(file_path: string, tag: string) {
   node.appendChild(script);
 }
 //@ts-ignore because chrome does not exist
-injectScript(chrome.extension.getURL("aes.js"), "body");
+injectScript(chrome.extension.getURL("content.js"), "body");
