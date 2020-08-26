@@ -5,5 +5,4 @@ function injectScript(file_path: string, tag: string) {
   script.setAttribute("src", file_path);
   node.appendChild(script);
 }
-//@ts-ignore because chrome does not exist
 injectScript(chrome.extension.getURL("aes.js"), "body");
