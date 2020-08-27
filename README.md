@@ -15,7 +15,7 @@ Based on this key and the chat name teacrypt will know which messages to de- and
 Also encrypted messaged should have a prefix to prevent plain messages to be wrongfully decrpyted.
 
 
-##Ideas for the future:
+## Ideas for the future:
 
 
 Right click on textbox to activate receipt anywhere 
