@@ -1,8 +1,18 @@
-console.log("Trying to hook teams");
+import './aes';
 
+import * as aesHelper from './aes_helper';
+
+console.log("nice");
+
+console.log("Trying to hook teams");
+interface EnhancedHTMLDivElement extends HTMLDivElement {
+  lastListenerInfo: Array<{ type: string; fn: EventListener; thirdEventParam?: boolean }>;
+}
+
+//@ts-ignore
 HTMLDivElement.prototype.realAddEventListener = HTMLDivElement.prototype.addEventListener;
 
-HTMLDivElement.prototype.addEventListener = function (a, b, c) {
+HTMLDivElement.prototype.addEventListener = function (a: string, b: EventListener, c?: boolean) {
   this.realAddEventListener(a, b, c);
   if (!this.lastListenerInfo) {
     this.lastListenerInfo = new Array();
@@ -10,7 +20,7 @@ HTMLDivElement.prototype.addEventListener = function (a, b, c) {
   this.lastListenerInfo.push({ type: a, fn: b, thirdEventParam: c });
 };
 
-let textbox;
+let textbox: EnhancedHTMLDivElement | undefined;
 
 setTimeout(hookTextbox, 10);
 
@@ -26,12 +36,12 @@ function hookTextbox() {
 function writeIntoTextbox() {
   test();
   console.log("starting mission");
-  let listener = textbox.lastListenerInfo.find((item) => item.type === "keydown");
-  if (!listener) {
+  let listenerComplete = textbox.lastListenerInfo.find((item) => item.type === "keydown");
+  if (!listenerComplete) {
     console.error("no listener found - aborting mission");
     return;
   }
-  listener = listener.fn;
+  const listener = listenerComplete.fn;
   textbox.removeEventListener("keydown", listener);
 
   textbox.addEventListener("keydown", function (e) {
@@ -44,9 +54,9 @@ function writeIntoTextbox() {
 }
 
 function test() {
-  var keyIv = window.generateKeyAndIV();
-  var keyIVObj = window.splitKeyAndIV(keyIv);
-  var encryptedText = window.encrypt("My AES encrypt-decrypt is working with padding!!!", keyIVObj.key, keyIVObj.iv);
-  var decryptedText = window.decrypt(encryptedText, keyIVObj.key, keyIVObj.iv);
+  var keyIv = aesHelper.generateKeyAndIV();
+  var keyIVObj = aesHelper.splitKeyAndIV(keyIv);
+  var encryptedText = aesHelper.encrypt("My AES encrypt-decrypt is working with padding!!!", keyIVObj.key, keyIVObj.iv);
+  var decryptedText = aesHelper.decrypt(encryptedText, keyIVObj.key, keyIVObj.iv);
   console.log(encryptedText, decryptedText);
 }

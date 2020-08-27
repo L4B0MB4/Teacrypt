@@ -1,4 +1,4 @@
-function injectScript(file_path, tag) {
+function injectScript(file_path: string, tag: string) {
   var node = document.getElementsByTagName(tag)[0];
   var script = document.createElement("script");
   script.setAttribute("type", "text/javascript");
@@ -6,5 +6,3 @@ function injectScript(file_path, tag) {
   node.appendChild(script);
 }
 injectScript(chrome.extension.getURL("aes.js"), "body");
-injectScript(chrome.extension.getURL("aes_helper.js"), "body");
-injectScript(chrome.extension.getURL("content.js"), "body");

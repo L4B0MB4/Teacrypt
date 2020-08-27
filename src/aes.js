@@ -1,7 +1,6 @@
-console.log("loading aesjs");
 //https://github.com/ricmoo/aes-js
 /*! MIT License. Copyright 2015-2018 Richard Moore <me@ricmoo.com>. See LICENSE.txt. */
-function aes(root) {
+export function aes(root) {
   "use strict";
 
   function checkInt(value) {

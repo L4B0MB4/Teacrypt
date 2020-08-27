@@ -2,7 +2,11 @@
 
 ## How to use in dev:
 
-Go to chrome extensions -> load unzipped files -> choose the 'Src' folder.
+Yarn install
+
+Yarn start or Yarn build
+
+Go to chrome extensions -> load unzipped files -> choose the 'dist' folder.
 
 Go to teams. Write a message. Hit enter (currently only enter is supported).
 
