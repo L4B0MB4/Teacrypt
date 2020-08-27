@@ -18,4 +18,4 @@ Also encrypted messaged should have a prefix to prevent plain messages to be wro
 ## Ideas for the future:
 
 
-Right click on textbox to activate receipt anywhere 
+Right click on textbox to activate teacrypt anywhere 
