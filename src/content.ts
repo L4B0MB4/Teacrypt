@@ -1,62 +1,31 @@
-import './aes';
-
-import * as aesHelper from './aes_helper';
-
-console.log("nice");
-
-console.log("Trying to hook teams");
-interface EnhancedHTMLDivElement extends HTMLDivElement {
-  lastListenerInfo: Array<{ type: string; fn: EventListener; thirdEventParam?: boolean }>;
+function injectScript(file_path: string, tag: string) {
+  var node = document.getElementsByTagName(tag)[0];
+  var script = document.createElement("script");
+  script.setAttribute("type", "text/javascript");
+  script.setAttribute("src", file_path);
+  node.appendChild(script);
 }
+injectScript(chrome.extension.getURL("injected.js"), "body");
 
-//@ts-ignore
-HTMLDivElement.prototype.realAddEventListener = HTMLDivElement.prototype.addEventListener;
+var node = document.getElementsByTagName("body")[0];
+var speciala = document.createElement("a");
+speciala.id = "teacrpyt";
+speciala.innerHTML = chrome.runtime.id;
+speciala.style.display = "none";
+node.appendChild(speciala);
 
-HTMLDivElement.prototype.addEventListener = function (a: string, b: EventListener, c?: boolean) {
-  this.realAddEventListener(a, b, c);
-  if (!this.lastListenerInfo) {
-    this.lastListenerInfo = new Array();
-  }
-  this.lastListenerInfo.push({ type: a, fn: b, thirdEventParam: c });
-};
-
-let textbox: EnhancedHTMLDivElement | undefined;
-
-setTimeout(hookTextbox, 10);
-
-function hookTextbox() {
-  if (!textbox) {
-    textbox = document.querySelector(".ts-edit-box >:nth-child(3)>*>:nth-child(2)>*");
-    setTimeout(hookTextbox, 10);
-  } else {
-    writeIntoTextbox();
-  }
-}
-
-function writeIntoTextbox() {
-  test();
-  console.log("starting mission");
-  let listenerComplete = textbox.lastListenerInfo.find((item) => item.type === "keydown");
-  if (!listenerComplete) {
-    console.error("no listener found - aborting mission");
+window.addEventListener("message", function (event) {
+  // Only accept messages from same frame
+  if (event.source !== window) {
     return;
   }
-  const listener = listenerComplete.fn;
-  textbox.removeEventListener("keydown", listener);
 
-  textbox.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      textbox.innerHTML = "replacement";
-      console.log("replacing text");
-    }
-    listener(e);
-  });
-}
+  var message = event.data;
 
-function test() {
-  var keyIv = aesHelper.generateKeyAndIV();
-  var keyIVObj = aesHelper.splitKeyAndIV(keyIv);
-  var encryptedText = aesHelper.encrypt("My AES encrypt-decrypt is working with padding!!!", keyIVObj.key, keyIVObj.iv);
-  var decryptedText = aesHelper.decrypt(encryptedText, keyIVObj.key, keyIVObj.iv);
-  console.log(encryptedText, decryptedText);
-}
+  // Only accept messages that we know are ours
+  if (typeof message !== "object" || message === null || !message.hello) {
+    return;
+  }
+
+  chrome.runtime.sendMessage(message);
+});
