@@ -53,9 +53,10 @@ function writeIntoTextbox() {
 
   textbox.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
-      //todo ! check
-      textbox.innerHTML = aesHelper.encryptSimple(Store.getKey("chatIdent")!, textbox.innerText);
-      //setTimeout(goOverTeamsChatMessages, 500);
+      const encrypted= aesHelper.encryptSimple(Store.getKey("chatIdent");
+      if(encrypted){
+        textbox.innerHTML = aesHelper.encryptSimple(Store.getKey("chatIdent")!, textbox.innerText);
+      }
     }
     listener(e);
   });
