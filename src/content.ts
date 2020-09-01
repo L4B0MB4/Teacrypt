@@ -53,9 +53,9 @@ function writeIntoTextbox() {
 
   textbox.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
-      const encrypted= aesHelper.encryptSimple(Store.getKey("chatIdent");
-      if(encrypted){
-        textbox.innerHTML = aesHelper.encryptSimple(Store.getKey("chatIdent")!, textbox.innerText);
+      const key = Store.getKey("chatIdent");
+      if (key) {
+        textbox.innerHTML = aesHelper.encryptSimple(key, textbox.innerText);
       }
     }
     listener(e);
