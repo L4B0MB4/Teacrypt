@@ -1,3 +1,7 @@
+export const TEACRYPT_PREFIX = "teacrypt--";
+
+export const STATIC_DEV_KEY_IV = "a6cd62a0a46bed0df56368e4839b1c01_split_e8e40ab3d5baa806034cae343520ced8";
+
 export function generateKeyAndIV() {
   var key = window.crypto.getRandomValues(new Uint8Array(16));
   var iv = window.crypto.getRandomValues(new Uint8Array(16));
@@ -41,9 +45,39 @@ export function decrypt(encryptedTextHex: string, key: Uint8Array, iv: Uint8Arra
   return decryptedText;
 }
 
-export function applyPadding(text: string, multiplier: number) {
-  var paddingAddLength = multiplier - (window.aesjs.utils.utf8.toBytes(text).length % multiplier) - 1;
+export function applyPadding(text: string, base: number) {
+  var paddingAddLength = base - (window.aesjs.utils.utf8.toBytes(text).length % base) - 1;
   var paddedText = text + "".padEnd(paddingAddLength, "0");
   paddedText += paddingAddLength.toString(16);
   return paddedText;
 }
+
+export const unpaddText = (str: string, base = 16) => {
+  const lastChar = str[str.length - 1];
+  const paddingLength = parseInt(lastChar, base);
+  if (Number.isNaN(paddingLength)) {
+    throw new Error("Cannot unpadd number");
+  }
+  return str.substring(0, str.length - 1 - paddingLength);
+};
+
+export const encryptSimple = (keyIv: string, message: string) => {
+  var keyIVObj = splitKeyAndIV(keyIv);
+  return TEACRYPT_PREFIX + encrypt(message, keyIVObj.key, keyIVObj.iv);
+};
+
+export const decryptSimple = (keyIv: string, encryptedText: string) => {
+  if (!encryptedText.startsWith(TEACRYPT_PREFIX)) {
+    console.warn("No teacrypt encryption");
+    return encryptedText;
+  }
+  try {
+    var encryptedTextSubstr = encryptedText.substring(TEACRYPT_PREFIX.length);
+    var keyIVObj = splitKeyAndIV(keyIv);
+    const decryptedPaddedText = decrypt(encryptedTextSubstr, keyIVObj.key, keyIVObj.iv);
+    return unpaddText(decryptedPaddedText);
+  } catch (ex) {
+    console.warn("Key not valid");
+  }
+  return encryptedText;
+};
