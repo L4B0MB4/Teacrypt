@@ -20,5 +20,20 @@ window.addEventListener("message", function (event) {
     return;
   }
 
-  chrome.runtime.sendMessage(message);
+  //prevent looping messages
+  if (message.from === "background") {
+    return;
+  }
+
+  chrome.runtime.sendMessage(message, (response) => {
+    if (chrome.runtime.lastError) {
+      console.log(chrome.runtime.lastError.message);
+    }
+
+    //prevent looping messages
+    if (response.from === "webpage") {
+      return;
+    }
+    window.postMessage(response, "*");
+  });
 });

@@ -56,11 +56,16 @@ function writeIntoTextbox() {
       const key = Store.getKey("chatIdent");
       if (key) {
         textbox.innerHTML = aesHelper.encryptSimple(key, textbox.innerText);
+        window.postMessage({ from: "webpage", msg: "hello background.js" }, "*");
       }
     }
     listener(e);
   });
 }
-setInterval(() => {
-  window.postMessage({ hello: "world" }, "*");
-}, 400);
+
+window.onmessage = (ev: MessageEvent) => {
+  if (typeof ev !== "object" || ev === null || !ev.data || ev.data.from === "webpage") {
+    return;
+  }
+  console.log(ev.data);
+};
