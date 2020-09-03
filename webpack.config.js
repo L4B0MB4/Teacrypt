@@ -22,7 +22,10 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: "./src/extension-config", to: "." }],
+      patterns: [
+        { from: "./src/extension-config", to: "." },
+        { from: "./src/popup", to: "." },
+      ],
     }),
   ],
 };

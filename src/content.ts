@@ -7,13 +7,6 @@ function injectScript(file_path: string, tag: string) {
 }
 injectScript(chrome.extension.getURL("injected.js"), "body");
 
-var node = document.getElementsByTagName("body")[0];
-var speciala = document.createElement("a");
-speciala.id = "teacrpyt";
-speciala.innerHTML = chrome.runtime.id;
-speciala.style.display = "none";
-node.appendChild(speciala);
-
 window.addEventListener("message", function (event) {
   // Only accept messages from same frame
   if (event.source !== window) {
@@ -23,7 +16,7 @@ window.addEventListener("message", function (event) {
   var message = event.data;
 
   // Only accept messages that we know are ours
-  if (typeof message !== "object" || message === null || !message.hello) {
+  if (typeof message !== "object" || message === null) {
     return;
   }
 
