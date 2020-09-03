@@ -1,10 +1,15 @@
+const sendMessage = (data) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, { from: "background", ...data });
+  });
+};
+
 document.addEventListener(
   "DOMContentLoaded",
   function () {
-    document.getElementById("generateKey").addEventListener("click", () => {
-      console.log("generateKey");
-      document.getElementById("myCurrentKey").value = "myval";
-      console.log(chrome);
+    document.getElementById("onoffStatus").addEventListener("click", () => {
+      const val = document.getElementById("onoffStatus").checked;
+      sendMessage({ status: val });
     });
   },
   false
@@ -15,9 +20,12 @@ var connections = {};
 // Receive message from content script and relay to the devTools page for the
 // current tab
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log("incoming message from injected script");
+  if (request.from !== "webpage") return;
   console.log(request);
-  sendResponse({ from: "background", msg: "hello webpage" });
+  if (request.status !== undefined) {
+    console.log(request.status);
+    document.getElementById("onoffStatus").checked = request.status;
+  }
 
   return true;
 });

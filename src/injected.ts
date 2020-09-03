@@ -4,6 +4,8 @@ import * as aesHelper from './aes_helper';
 import Store from './store';
 import { goOverTeamsChatMessages } from './Teams/teams';
 
+let isActive = false;
+
 Store.addKey(aesHelper.STATIC_DEV_KEY_IV, "chatIdent");
 
 console.log("Trying to hook teams");
@@ -36,7 +38,9 @@ function hookTextbox() {
 }
 
 const goOverChat = () => {
-  goOverTeamsChatMessages();
+  if (isActive) {
+    goOverTeamsChatMessages();
+  }
   setTimeout(goOverChat, 500);
 };
 
@@ -52,11 +56,11 @@ function writeIntoTextbox() {
   textbox.removeEventListener("keydown", listener);
 
   textbox.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
+    console.log(isActive);
+    if (e.key === "Enter" && isActive) {
       const key = Store.getKey("chatIdent");
       if (key) {
         textbox.innerHTML = aesHelper.encryptSimple(key, textbox.innerText);
-        window.postMessage({ from: "webpage", msg: "hello background.js" }, "*");
       }
     }
     listener(e);
@@ -66,6 +70,9 @@ function writeIntoTextbox() {
 window.onmessage = (ev: MessageEvent) => {
   if (typeof ev !== "object" || ev === null || !ev.data || ev.data.from === "webpage") {
     return;
+  }
+  if (ev.data.status !== undefined) {
+    isActive = ev.data.status;
   }
   console.log(ev.data);
 };
