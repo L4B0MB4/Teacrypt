@@ -1,6 +1,10 @@
 import './aes';
 
 import * as aesHelper from './aes_helper';
+import Store from './store';
+import { goOverTeamsChatMessages } from './Teams/teams';
+
+Store.addKey(aesHelper.STATIC_DEV_KEY_IV, "chatIdent");
 
 console.log("Trying to hook teams");
 interface EnhancedHTMLDivElement extends HTMLDivElement {
@@ -31,9 +35,14 @@ function hookTextbox() {
   }
 }
 
+const goOverChat = () => {
+  goOverTeamsChatMessages();
+  setTimeout(goOverChat, 500);
+};
+
 function writeIntoTextbox() {
-  test();
   console.log("starting mission");
+  goOverChat();
   let listenerComplete = textbox.lastListenerInfo.find((item) => item.type === "keydown");
   if (!listenerComplete) {
     console.error("no listener found - aborting mission");
@@ -44,19 +53,13 @@ function writeIntoTextbox() {
 
   textbox.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
-      textbox.innerHTML = "replacement";
-      console.log("replacing text");
+      const key = Store.getKey("chatIdent");
+      if (key) {
+        textbox.innerHTML = aesHelper.encryptSimple(key, textbox.innerText);
+      }
     }
     listener(e);
   });
-}
-
-function test() {
-  var keyIv = aesHelper.generateKeyAndIV();
-  var keyIVObj = aesHelper.splitKeyAndIV(keyIv);
-  var encryptedText = aesHelper.encrypt("My AES encrypt-decrypt is working with padding!!!", keyIVObj.key, keyIVObj.iv);
-  var decryptedText = aesHelper.decrypt(encryptedText, keyIVObj.key, keyIVObj.iv);
-  console.log(encryptedText, decryptedText);
 }
 setInterval(() => {
   window.postMessage({ hello: "world" }, "*");
