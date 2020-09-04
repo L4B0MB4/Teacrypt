@@ -1,5 +1,7 @@
 import './encryption/aes';
 
+import { Communication } from './communication/injected/communication';
+import { StatusPayload, TYPE_ONOFF } from './communication/types';
 import * as aesHelper from './encryption/aes_helper';
 import Store from './encryption/store';
 import { goOverTeamsChatMessages } from './Teams/teams';
@@ -41,6 +43,7 @@ const goOverChat = () => {
   if (isActive) {
     goOverTeamsChatMessages();
   }
+  Communication.sendMessage(TYPE_ONOFF, { status: isActive });
   setTimeout(goOverChat, 500);
 };
 
@@ -67,12 +70,6 @@ function writeIntoTextbox() {
   });
 }
 
-window.onmessage = (ev: MessageEvent) => {
-  if (typeof ev !== "object" || ev === null || !ev.data || ev.data.from === "webpage") {
-    return;
-  }
-  if (ev.data.status !== undefined) {
-    isActive = ev.data.status;
-  }
-  console.log(ev.data);
-};
+Communication.addListener(TYPE_ONOFF, (data: StatusPayload) => {
+  isActive = data.status;
+});
