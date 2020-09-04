@@ -1,7 +1,7 @@
-import './aes';
+import './encryption/aes';
 
-import * as aesHelper from './aes_helper';
-import Store from './store';
+import * as aesHelper from './encryption/aes_helper';
+import Store from './encryption/store';
 import { goOverTeamsChatMessages } from './Teams/teams';
 
 let isActive = false;
