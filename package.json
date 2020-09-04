@@ -4,7 +4,8 @@
   "description": "## How to use in dev:",
   "scripts": {
     "start": "webpack --config webpack.config.js --watch --mode development",
-    "build": "webpack --config webpack.config.js --mode production"
+    "build": "webpack --config webpack.config.js --mode production",
+    "start-be": "webpack --config webpack.be.config.js --watch --mode development"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,9 @@
   },
   "homepage": "https://github.com/L4B0MB4/Teacrypt#readme",
   "devDependencies": {
+    "@types/chrome": "^0.0.122",
+    "@types/express": "^4.17.8",
+    "@types/node-rsa": "^1.0.0",
     "copy-webpack-plugin": "^6.0.3",
     "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
@@ -25,6 +29,8 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "@types/chrome": "^0.0.122"
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "node-rsa": "^1.1.1"
   }
 }
