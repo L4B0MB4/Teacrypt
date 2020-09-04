@@ -1,4 +1,4 @@
-const sendMessage = (data) => {
+const sendMessage = (data: any) => {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(tabs[0].id, { from: "background", ...data });
   });
@@ -8,14 +8,14 @@ document.addEventListener(
   "DOMContentLoaded",
   function () {
     document.getElementById("onoffStatus").addEventListener("click", () => {
-      const val = document.getElementById("onoffStatus").checked;
+      const val = (document.getElementById("onoffStatus") as HTMLInputElement).checked;
       sendMessage({ status: val });
     });
   },
   false
 );
 
-var connections = {};
+var connections: any = {};
 
 // Receive message from content script and relay to the devTools page for the
 // current tab
@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request);
   if (request.status !== undefined) {
     console.log(request.status);
-    document.getElementById("onoffStatus").checked = request.status;
+    (document.getElementById("onoffStatus") as HTMLInputElement).checked = request.status;
   }
 
   return true;
