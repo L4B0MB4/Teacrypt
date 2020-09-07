@@ -1,18 +1,23 @@
 import * as express from 'express';
 import * as NodeRSA from 'node-rsa';
 
+import { ApiRouter } from './api/route';
+import { RSA_KEYS } from './keys';
+
 // the types are wrong for the express-validator
 const { query, validationResult } = require("express-validator");
 const port = 3000;
 const key = new NodeRSA({ b: 2064 });
+
+key.importKey(RSA_KEYS.PRIVATE, "private");
+
+key.importKey(RSA_KEYS.PUBLIC, "public");
 
 const text = "Hello RSA!";
 const encrypted = key.encrypt(text, "base64");
 console.log("encrypted: ", encrypted);
 const decrypted = key.decrypt(encrypted, "utf8");
 console.log("decrypted: ", decrypted);
-
-console.log(key.exportKey("public"));
 
 const app = express();
 
@@ -30,6 +35,8 @@ const validate = (validations: Array<any>) => {
     res.status(400).json({ errors: errors.array() });
   };
 };
+
+app.use("/api", ApiRouter);
 
 app.get("/", validate([query("username").notEmpty().isString()]), (req: express.Request, res: express.Response) => {
   return res.json({ username: req.query.username });
