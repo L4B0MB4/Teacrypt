@@ -119,3 +119,5 @@ dist
 # misc
 .DS_Store
 
+
+packages/frontend/build/
