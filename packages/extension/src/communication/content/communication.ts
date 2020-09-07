@@ -23,7 +23,7 @@ export const initCommunication = () => {
     }
 
     //prevent looping messages
-    if (message.from === FROM.BACKGROUND) {
+    if (message.from === FROM.BACKGROUND || !message.from) {
       return;
     }
     chrome.runtime.sendMessage(message, (response) => {

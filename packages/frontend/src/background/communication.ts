@@ -1,5 +1,6 @@
-import { EventListener } from '../events/Eventlistener';
-import { FROM } from '../types';
+import { EventListener } from '@teacrypt/common';
+
+import { FROM } from './types';
 
 class CommunicationC extends EventListener {
   connections: Record<number, chrome.runtime.Port> = {};
@@ -19,7 +20,7 @@ class CommunicationC extends EventListener {
     chrome.runtime.onConnect.addListener((port) => {
       // Listen to messages sent from the DevTools page
       port.onMessage.addListener((request) => {
-        if (request.name == "init") {
+        if (request.name === "init") {
           this.connections[request.tabId] = port;
           port.onDisconnect.addListener(() => {
             delete this.connections[request.tabId];
@@ -33,7 +34,7 @@ class CommunicationC extends EventListener {
 
   sendMessage = (type: string, data: any) => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { from: FROM.BACKGROUND, type, data });
+      chrome.tabs.sendMessage(tabs[0].id!, { from: FROM.BACKGROUND, type, data });
     });
   };
 }
