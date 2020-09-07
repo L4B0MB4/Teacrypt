@@ -2,10 +2,12 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "outDir": "./dist/",
-    "module": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
     "target": "es5",
     "jsx": "react",
     "allowJs": true,
     "lib": ["es2017", "dom"]
-  }
+  },
+  "references": [{ "path": "../common" }]
 }

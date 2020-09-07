@@ -2,19 +2,20 @@
   "name": "Teacrypt",
   "description": "mydescription",
   "version": "2.0",
-  "permissions": ["activeTab"],
+  "permissions": ["tabs", "activeTab"],
   "browser_action": {
     "default_title": "Teacrypt",
     "default_icon": "logo.png",
     "default_popup": "index.html"
   },
+  "background": { "page": "index.html" },
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["background.js"],
+      "js": ["content.js"],
       "all_frames": true
     }
   ],
-  "web_accessible_resources": ["content.js", "aes.js", "aes_helper.js"],
+  "web_accessible_resources": ["injected.js"],
   "manifest_version": 2
 }

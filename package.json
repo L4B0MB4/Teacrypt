@@ -5,7 +5,8 @@
   "private": "true",
   "scripts": {
     "start": "lerna run --parallel start",
-    "build": "lerna run --parallel build"
+    "build": "lerna run --parallel build",
+    "install": "lerna run --parallel install && lerna run --parallel prepare"
   },
   "repository": {
     "type": "git",

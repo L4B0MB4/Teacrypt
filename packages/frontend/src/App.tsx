@@ -1,20 +1,24 @@
-import React from "react";
+import { MSG, StatusPayload } from '@teacrypt/common/src/communication/communicationtypes';
+import React, { useEffect } from 'react';
+
+import { Communication } from './background/communication';
+
+const onChangeInput = () => {
+  const val = (document.getElementById("onoffStatus") as HTMLInputElement).checked;
+  Communication.sendMessage(MSG.ONOFF, { status: val });
+};
 
 function App() {
+  useEffect(() => {
+    Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
+      (document.getElementById("onoffStatus") as HTMLInputElement).checked = data.status;
+    });
+  }, []);
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload. Test
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <label>An/Aus encryption</label>
+        <input onClick={onChangeInput} value="" type="checkbox" />
       </header>
     </div>
   );
