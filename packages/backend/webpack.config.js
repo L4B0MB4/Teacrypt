@@ -3,7 +3,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   target: "node",
-  entry: { main: "./backend/main.ts" },
+  entry: { main: "./src/main.ts" },
   devtool: "inline-source-map",
   module: {
     rules: [

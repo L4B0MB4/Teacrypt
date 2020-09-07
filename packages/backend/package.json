@@ -1,0 +1,38 @@
+{
+  "name": "@teacrypt/backend",
+  "version": "1.0.0",
+  "description": "## How to use in dev:",
+  "scripts": {
+    "start": "concurrently \"yarn start-webpack\" \" yarn start-dev\"",
+    "start-webpack": "webpack --config webpack.config.js --watch --mode development",
+    "start-dev": "nodemon build/main.js",
+    "build": "webpack --config webpack.config.js --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/L4B0MB4/Teacrypt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/L4B0MB4/Teacrypt/issues"
+  },
+  "homepage": "https://github.com/L4B0MB4/Teacrypt#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.8",
+    "@types/node-rsa": "^1.0.0",
+    "concurrently": "^5.3.0",
+    "copy-webpack-plugin": "^6.0.3",
+    "ts-loader": "^8.0.3",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "node-rsa": "^1.1.1",
+    "nodemon": "^2.0.4"
+  }
+}
