@@ -1,7 +1,7 @@
 import './encryption/aes';
 
 import { Communication } from './communication/injected/communication';
-import { StatusPayload, TYPE_ONOFF } from './communication/types';
+import { MSG, StatusPayload } from './communication/types';
 import * as aesHelper from './encryption/aes_helper';
 import Store from './encryption/store';
 import { goOverTeamsChatMessages } from './Teams/teams';
@@ -15,7 +15,6 @@ interface EnhancedHTMLDivElement extends HTMLDivElement {
   lastListenerInfo: Array<{ type: string; fn: EventListener; thirdEventParam?: boolean }>;
 }
 
-//@ts-ignore
 HTMLDivElement.prototype.realAddEventListener = HTMLDivElement.prototype.addEventListener;
 
 HTMLDivElement.prototype.addEventListener = function (a: string, b: EventListener, c?: boolean) {
@@ -43,7 +42,7 @@ const goOverChat = () => {
   if (isActive) {
     goOverTeamsChatMessages();
   }
-  Communication.sendMessage(TYPE_ONOFF, { status: isActive });
+  Communication.sendMessage(MSG.ONOFF, { status: isActive });
   setTimeout(goOverChat, 500);
 };
 
@@ -70,6 +69,6 @@ function writeIntoTextbox() {
   });
 }
 
-Communication.addListener(TYPE_ONOFF, (data: StatusPayload) => {
+Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
   isActive = data.status;
 });

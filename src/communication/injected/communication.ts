@@ -1,5 +1,5 @@
 import { EventListener } from '../events/Eventlistener';
-import { FROM_WEBPAGE } from '../types';
+import { FROM } from '../types';
 
 class CommunicationC extends EventListener {
   connections: any = {};
@@ -10,7 +10,7 @@ class CommunicationC extends EventListener {
   }
   initCommunication = () => {
     window.onmessage = (e: MessageEvent) => {
-      if (typeof e !== "object" || e === null || !e.data || e.data.from === FROM_WEBPAGE || !e.data.type) {
+      if (typeof e !== "object" || e === null || !e.data || e.data.from === FROM.WEBPAGE || !e.data.type) {
         return;
       }
       this.emit(e.data.type, e.data.data);
@@ -18,7 +18,7 @@ class CommunicationC extends EventListener {
   };
 
   sendMessage = (type: string, data: any) => {
-    window.postMessage({ from: FROM_WEBPAGE, type, data }, "*");
+    window.postMessage({ from: FROM.WEBPAGE, type, data }, "*");
   };
 }
 

@@ -1,8 +1,8 @@
 import { EventListener } from '../events/Eventlistener';
-import { FROM_BACKGROUND, FROM_WEBPAGE } from '../types';
+import { FROM } from '../types';
 
 class CommunicationC extends EventListener {
-  connections: any = {};
+  connections: Record<number, chrome.runtime.Port> = {};
 
   constructor() {
     super();
@@ -11,7 +11,7 @@ class CommunicationC extends EventListener {
   initCommunication = () => {
     /* additional parameters 'sender, sendResponse' not used because window.postMessage has no sendResponse*/
     chrome.runtime.onMessage.addListener((request) => {
-      if (request.from !== FROM_WEBPAGE || !request.type) return;
+      if (request.from !== FROM.WEBPAGE || !request.type) return;
       this.emit(request.type, request.data);
       return true;
     });
@@ -33,7 +33,7 @@ class CommunicationC extends EventListener {
 
   sendMessage = (type: string, data: any) => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { from: FROM_BACKGROUND, type, data });
+      chrome.tabs.sendMessage(tabs[0].id, { from: FROM.BACKGROUND, type, data });
     });
   };
 }

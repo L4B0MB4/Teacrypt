@@ -1,9 +1,9 @@
-import { FROM_BACKGROUND, FROM_WEBPAGE } from '../types';
+import { FROM } from '../types';
 
 export const initCommunication = () => {
   //for background initiated messages
   chrome.runtime.onMessage.addListener((request) => {
-    if (request.from === FROM_BACKGROUND) {
+    if (request.from === FROM.BACKGROUND) {
       window.postMessage(request, "*");
     }
     return true;
@@ -23,7 +23,7 @@ export const initCommunication = () => {
     }
 
     //prevent looping messages
-    if (message.from === FROM_BACKGROUND) {
+    if (message.from === FROM.BACKGROUND) {
       return;
     }
     chrome.runtime.sendMessage(message, (response) => {
@@ -32,7 +32,7 @@ export const initCommunication = () => {
       }
 
       //prevent looping messages
-      if (response.from === FROM_WEBPAGE) {
+      if (response.from === FROM.WEBPAGE) {
         return;
       }
       window.postMessage(response, "*");
