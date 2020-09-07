@@ -4,8 +4,7 @@ import * as path from 'path';
 
 import { ApiRouter } from './api/route';
 
-// the types are wrong for the express-validator
-const { query } = require("express-validator");
+dotenv.config({ path: path.resolve(path.join(process.cwd(), "/config/"), ".env") });
 
 dotenv.config({ path: path.resolve(path.join(process.cwd(), "/config/"), ".env") });
 
