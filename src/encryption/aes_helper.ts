@@ -68,7 +68,7 @@ export const encryptSimple = (keyIv: string, message: string) => {
 
 export const decryptSimple = (keyIv: string, encryptedText: string) => {
   if (!encryptedText.startsWith(TEACRYPT_PREFIX)) {
-    console.warn("No teacrypt encryption");
+    //No teacrypt encryption;
     return encryptedText;
   }
   try {

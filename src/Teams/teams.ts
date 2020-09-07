@@ -1,5 +1,5 @@
-import * as aesHelper from '../aes_helper';
-import Store from '../store';
+import * as aesHelper from '../encryption/aes_helper';
+import Store from '../encryption/store';
 import { getElementsByXPath } from '../utils/utils';
 
 export const goOverTeamsChatMessages = () => {

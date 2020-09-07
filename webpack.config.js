@@ -2,7 +2,7 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  entry: { content: "./src/content.ts", background: "./src/background.ts" },
+  entry: { injected: "./src/injected.ts", content: "./src/content.ts", background: "./src/background.ts" },
   devtool: "inline-source-map",
   module: {
     rules: [
@@ -22,7 +22,7 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: "./src/extension-config", to: "." }],
+      patterns: [{ from: "./static", to: "." }],
     }),
   ],
 };
