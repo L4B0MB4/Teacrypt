@@ -1,4 +1,5 @@
-import { EventListener } from '../events/Eventlistener';
+import { EventListener } from '@teacrypt/common';
+
 import { FROM } from '../types';
 
 class CommunicationC extends EventListener {

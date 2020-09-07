@@ -1,12 +1,10 @@
 {
-  "name": "teacrypt",
+  "name": "@teacrypt/extension",
   "version": "1.0.0",
   "description": "## How to use in dev:",
-  "private": "true",
   "scripts": {
-    "start": "lerna run --parallel start",
-    "build": "lerna run --parallel build",
-    "install": "lerna run --parallel install && lerna run --parallel prepare"
+    "start": "webpack --config webpack.config.js --watch --mode development",
+    "build": "webpack --config webpack.config.js --mode production"
   },
   "repository": {
     "type": "git",
@@ -21,8 +19,6 @@
   "homepage": "https://github.com/L4B0MB4/Teacrypt#readme",
   "devDependencies": {
     "@types/chrome": "^0.0.122",
-    "@types/express": "^4.17.8",
-    "@types/node-rsa": "^1.0.0",
     "copy-webpack-plugin": "^6.0.3",
     "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
@@ -30,9 +26,6 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-validator": "^6.6.1",
-    "node-rsa": "^1.1.1"
+    "@teacrypt/common": "^1.0.0"
   }
 }
