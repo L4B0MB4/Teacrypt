@@ -16,6 +16,7 @@
     "@types/react-dom": "^16.9.0",
     "fs-extra": "^9.0.1",
     "react-scripts": "3.4.0",
+    "rimraf": "^3.0.2",
     "typescript": "~3.7.2"
   },
   "scripts": {
