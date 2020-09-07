@@ -1,5 +1,6 @@
 import { EventListener } from '@teacrypt/common';
-import { FROM } from '@teacrypt/common/src/communication/types';
+
+import { FROM } from './types';
 
 class CommunicationC extends EventListener {
   connections: Record<number, chrome.runtime.Port> = {};
@@ -33,7 +34,7 @@ class CommunicationC extends EventListener {
 
   sendMessage = (type: string, data: any) => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { from: FROM.BACKGROUND, type, data });
+      chrome.tabs.sendMessage(tabs[0].id!, { from: FROM.BACKGROUND, type, data });
     });
   };
 }

@@ -1,7 +1,7 @@
-import { MSG, StatusPayload } from '@teacrypt/common/src/communication/communicationtypes';
 import React, { useEffect } from 'react';
 
 import { Communication } from './background/communication';
+import { MSG, StatusPayload } from './background/types';
 
 const onChangeInput = () => {
   const val = (document.getElementById("onoffStatus") as HTMLInputElement).checked;

@@ -1,4 +1,4 @@
-import { FROM } from '@teacrypt/common/src/communication/types';
+import { FROM } from '../types';
 
 export const initCommunication = () => {
   //for background initiated messages

@@ -1,8 +1,7 @@
 import './encryption/aes';
 
-import { MSG, StatusPayload } from '@teacrypt/common/src/communication/types';
-
 import { Communication } from './communication/injected/communication';
+import { MSG, StatusPayload } from './communication/types';
 import * as aesHelper from './encryption/aes_helper';
 import Store from './encryption/store';
 import { goOverTeamsChatMessages } from './Teams/teams';

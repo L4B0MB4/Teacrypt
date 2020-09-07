@@ -1,5 +1,6 @@
 import { EventListener } from '@teacrypt/common';
-import { FROM } from '@teacrypt/common/src/communication/types';
+
+import { FROM } from '../types';
 
 class CommunicationC extends EventListener {
   connections: any = {};
