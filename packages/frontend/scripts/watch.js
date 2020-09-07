@@ -10,9 +10,7 @@ var entry = config.entry;
 var plugins = config.plugins;
 
 entry = entry.filter((fileName) => !fileName.match(/webpackHotDevClient/));
-plugins = plugins.filter(
-  (plugin) => !(plugin instanceof webpack.HotModuleReplacementPlugin)
-);
+plugins = plugins.filter((plugin) => !(plugin instanceof webpack.HotModuleReplacementPlugin));
 
 config.entry = entry;
 config.plugins = plugins;
@@ -25,6 +23,7 @@ webpack(config).watch({}, (err, stats) => {
   }
   console.error(
     stats.toString({
+      modules: false,
       chunks: false,
       colors: true,
     })
