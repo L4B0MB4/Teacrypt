@@ -1,13 +1,21 @@
 {
-  "name": "teacrypt",
-  "version": "1.0.0",
-  "manifest_version": 2,
-  "description": "Strong password generator",
-  "icons": {
-    "512": "logo512.png"
-  },
+  "name": "Teacrypt",
+  "description": "mydescription",
+  "version": "2.0",
+  "permissions": ["tabs", "activeTab"],
   "browser_action": {
-    "default_icon": "logo512.png",
-    "default_popup": "popup.html"
-  }
+    "default_title": "Teacrypt",
+    "default_icon": "logo.png",
+    "default_popup": "index.html"
+  },
+  "background": { "page": "index.html" },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": ["injected.js"],
+  "manifest_version": 2
 }

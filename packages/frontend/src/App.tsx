@@ -18,7 +18,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <label>An/Aus encryption</label>
-        <input onClick={onChangeInput} value="" type="checkbox" />
+        <input id="onoffStatus" onClick={onChangeInput} value="" type="checkbox" />
       </header>
     </div>
   );

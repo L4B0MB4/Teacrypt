@@ -25,5 +25,5 @@ exec("yarn react-scripts build", (err, stdout, stderr) => {
   rimraf.sync(resolveApp("dist"), { recursive: true });
   fs.mkdirSync(resolveApp("dist"));
   fse.copySync(resolveApp("build"), resolveApp("dist"));
-  fse.moveSync(resolveApp("dist/index.html"), resolveApp("dist/popup.html"));
+  //fse.moveSync(resolveApp("dist/index.html"), resolveApp("dist/popup.html"));
 });
