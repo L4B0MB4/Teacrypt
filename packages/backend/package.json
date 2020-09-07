@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "## How to use in dev:",
   "scripts": {
+    "prepare": "yarn build",
     "start": "concurrently \"yarn start-webpack\" \" yarn start-dev\"",
     "start-webpack": "webpack --config webpack.config.js --watch --mode development",
     "start-dev": "nodemon build/main.js",
