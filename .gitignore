@@ -109,3 +109,15 @@ dist
 
 
 build
+# dependencies	
+/.pnp	
+.pnp.js	
+
+# production	
+/build	
+
+# misc	
+.DS_Store	
+
+
+packages/frontend/build/
