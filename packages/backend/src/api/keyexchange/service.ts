@@ -1,6 +1,7 @@
 import * as NodeRSA from 'node-rsa';
 
 import { RSA_KEYS } from '../../keys';
+import { SessionStore } from '../../utils/sessions';
 import { KeyModel } from './model';
 
 const ownKeys = new NodeRSA({ b: 2064 });
@@ -13,7 +14,20 @@ export const getPublicKey = () => {
   return RSA_KEYS.PUBLIC;
 };
 
-export const encrypt = (toEncrypt: string, publicKey: NodeRSA.Key) => {
+export const authenticate = async (publicKey: string) => {
+  new NodeRSA(publicKey, "public");
+  const result = await KeyModel.findOne({ publicKey });
+  if (result) {
+    return SessionStore.getOrGenerateSession(result.publicKey);
+  } else {
+    const keyM = new KeyModel();
+    keyM.publicKey = publicKey.toString();
+    await keyM.save();
+    return SessionStore.getOrGenerateSession(keyM.publicKey);
+  }
+};
+
+export const encrypt = (toEncrypt: string, publicKey: string) => {
   const foreignKey = new NodeRSA(publicKey, "public");
   const result = foreignKey.encrypt(toEncrypt, "base64");
   const keyM = new KeyModel();
