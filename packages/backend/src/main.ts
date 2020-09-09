@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv';
-import * as express from 'express';
-import * as mongoose from 'mongoose';
-import * as path from 'path';
+import dotenv from 'dotenv';
+import express from 'express';
+import mongoose from 'mongoose';
+import path from 'path';
 
 import { ApiRouter } from './api/route';
 
@@ -11,7 +11,7 @@ mongoose.connect(process.env.MONGODB_SRV, { useNewUrlParser: true, useUnifiedTop
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
-  console.log("connected");
+  console.log("Connected to mongodb");
   const port = 3000;
 
   const app = express();
