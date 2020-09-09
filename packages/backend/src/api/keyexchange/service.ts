@@ -1,6 +1,7 @@
 import * as NodeRSA from 'node-rsa';
 
 import { RSA_KEYS } from '../../keys';
+import { KeyModel } from './model';
 
 const ownKeys = new NodeRSA({ b: 2064 });
 
@@ -14,7 +15,11 @@ export const getPublicKey = () => {
 
 export const encrypt = (toEncrypt: string, publicKey: NodeRSA.Key) => {
   const foreignKey = new NodeRSA(publicKey, "public");
-  return foreignKey.encrypt(toEncrypt, "base64");
+  const result = foreignKey.encrypt(toEncrypt, "base64");
+  const keyM = new KeyModel();
+  keyM.publicKey = publicKey.toString();
+  keyM.save();
+  return result;
 };
 
 export const decrypt = (toDecrypt: string) => {

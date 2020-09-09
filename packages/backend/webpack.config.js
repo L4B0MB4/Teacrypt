@@ -1,5 +1,5 @@
 const path = require("path");
-const CopyPlugin = require("copy-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   target: "node",
@@ -21,4 +21,8 @@ module.exports = {
     filename: "[name].js",
     path: path.resolve(__dirname, "build"),
   },
+  /**
+   * https://github.com/Automattic/mongoose/issues/7476#issuecomment-486912529
+   */
+  plugins: [new webpack.ContextReplacementPlugin(/.*/)],
 };
