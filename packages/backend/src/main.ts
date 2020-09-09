@@ -1,9 +1,6 @@
-import * as express from 'express';
+import express from 'express';
 
 import { ApiRouter } from './api/route';
-
-// the types are wrong for the express-validator
-const { query } = require("express-validator");
 
 const port = 3000;
 

@@ -1,4 +1,4 @@
-import * as NodeRSA from 'node-rsa';
+import NodeRSA from 'node-rsa';
 
 import { RSA_KEYS } from '../../keys';
 
