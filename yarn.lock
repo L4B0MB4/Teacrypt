@@ -9586,7 +9586,7 @@ mongodb-client-encryption@^1.1.0:
     nan "^2.14.0"
     prebuild-install "5.3.0"
 
-mongodb@3.6.1, mongodb@^3.6.1:
+mongodb@3.6.1:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.6.1.tgz#2c5cc2a81456ba183e8c432d80e78732cc72dabd"
   integrity sha512-uH76Zzr5wPptnjEKJRQnwTsomtFOU/kQEU8a9hKHr2M7y9qVk7Q4Pkv0EQVp88742z9+RwvsdTw6dRjDZCNu1g==
