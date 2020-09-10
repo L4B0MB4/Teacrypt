@@ -1,19 +1,30 @@
+import dotenv from 'dotenv';
 import express from 'express';
+import mongoose from 'mongoose';
+import path from 'path';
 
 import { ApiRouter } from './api/route';
 
-const port = 3000;
+dotenv.config({ path: path.resolve(path.join(process.cwd(), "/config/"), ".env") });
+mongoose.connect(process.env.MONGODB_SRV, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const app = express();
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+  console.log("Connected to mongodb");
+  const port = 3000;
 
-app.use(express.json());
+  const app = express();
 
-app.use("/api", ApiRouter);
+  app.use(express.json());
 
-app.get("/", (req: express.Request, res: express.Response) => {
-  return res.send("Welcome to Teacrypt");
-});
+  app.use("/api", ApiRouter);
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  app.get("/", (_: express.Request, res: express.Response) => {
+    return res.send("Welcome to Teacrypt");
+  });
+
+  app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`);
+  });
 });

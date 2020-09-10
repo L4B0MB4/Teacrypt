@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 
+import { responses } from '../../utils/responses';
 import * as ValidationUtils from '../../utils/validation';
 import * as service from './service';
 
@@ -14,13 +15,14 @@ export const getPublicKey = (_: Request, res: Response) => {
   }
 };
 
-export const encryptValidation = ValidationUtils.validate([body("publicKey").notEmpty().isString()]);
-export const encrypt = (req: Request, res: Response) => {
+export const authenticateValidation = ValidationUtils.validate([body("publicKey").notEmpty().isString()]);
+export const authenticate = async (req: Request, res: Response) => {
   try {
-    const encrypted = service.encrypt(Date.now().toString(), req.body.publicKey);
-    return res.json({ encrypted });
+    const plainSessionId = await service.authenticate(req.body.publicKey);
+    const sessionId = service.encrypt(plainSessionId, req.body.publicKey);
+    return res.json({ sessionId });
   } catch (ex) {
-    return res.status(400).json({ status: 400, message: ex.message });
+    return responses.error(res, ex);
   }
 };
 
@@ -30,6 +32,6 @@ export const decrypt = (req: Request, res: Response) => {
     const decrypted = service.decrypt(req.body.toDecrypt);
     return res.json({ decrypted });
   } catch (ex) {
-    return res.status(400).json({ status: 400, message: ex.message });
+    return responses.error(res, ex);
   }
 };
