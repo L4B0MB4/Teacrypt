@@ -1,9 +1,9 @@
 const path = require("path");
-const webpack = require("webpack");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   target: "node",
-  entry: { main: "./src/main.ts" },
+  entry: { main: "./backend/main.ts" },
   devtool: "inline-source-map",
   module: {
     rules: [
@@ -21,8 +21,9 @@ module.exports = {
     filename: "[name].js",
     path: path.resolve(__dirname, "build"),
   },
-  /**
-   * https://github.com/Automattic/mongoose/issues/7476#issuecomment-486912529
-   */
-  plugins: [new webpack.ContextReplacementPlugin(/.*/)],
+  plugins: [
+    new CopyPlugin({
+      patterns: [{ from: "./backend/config", to: "./config" }],
+    }),
+  ],
 };

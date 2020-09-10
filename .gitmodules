@@ -1,0 +1,3 @@
+[submodule "packages/backend/config"]
+	path = packages/backend/config
+	url = https://github.com/L4B0MB4/TeacryptConfig.git
