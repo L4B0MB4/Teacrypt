@@ -7,8 +7,8 @@
     "start-webpack": "webpack --config webpack.config.js --watch --mode development",
     "start-dev": "nodemon build/main.js",
     "build": "webpack --config webpack.config.js --mode production",
-    "test-watch": "ts-mocha --paths -p ./tsconfig.json src/**/*.spec.ts -w --watch-extensions ts",
-    "test": "jest"
+    "test": "jest --coverage",
+    "test-watch": "jest --coverage --watchAll"
   },
   "repository": {
     "type": "git",
