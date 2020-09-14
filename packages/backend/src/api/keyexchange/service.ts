@@ -16,7 +16,7 @@ export const authenticate = async (publicKey: string) => {
     return SessionStore.getOrGenerateSession(result.publicKey);
   } else {
     const keyM = new KeyModel();
-    keyM.publicKey = publicKey.toString();
+    keyM.publicKey = publicKey;
     await keyM.save();
     return SessionStore.getOrGenerateSession(keyM.publicKey);
   }
@@ -25,9 +25,6 @@ export const authenticate = async (publicKey: string) => {
 export const encrypt = (toEncrypt: string, publicKey: string) => {
   const foreignKey = new NodeRSA(publicKey, "public");
   const result = foreignKey.encrypt(toEncrypt, "base64");
-  const keyM = new KeyModel();
-  keyM.publicKey = publicKey.toString();
-  keyM.save();
   return result;
 };
 

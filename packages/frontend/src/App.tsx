@@ -2,12 +2,14 @@ import React, { useEffect } from 'react';
 
 import { Communication } from './background/communication';
 import { MSG, StatusPayload } from './background/types';
+import { AuthenticationHandler } from './services/Auth/AuthenticationHandler';
 
 const onChangeInput = () => {
   const val = (document.getElementById("onoffStatus") as HTMLInputElement).checked;
   Communication.sendMessage(MSG.ONOFF, { status: val });
 };
 
+AuthenticationHandler.authenticate();
 function App() {
   useEffect(() => {
     Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
