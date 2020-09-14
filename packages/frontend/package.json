@@ -15,6 +15,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "fs-extra": "^9.0.1",
+    "jest-webextension-mock": "^3.6.1",
     "react-scripts": "3.4.0",
     "rimraf": "^3.0.2",
     "typescript": "~3.7.2"
@@ -24,7 +25,8 @@
     "start": "node scripts/watch.js",
     "watch": "node scripts/watch.js",
     "build": "node ./scripts/build.js",
-    "test": "react-scripts test",
+    "test-watch": "react-scripts test --coverage --watchAll",
+    "test": "react-scripts test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

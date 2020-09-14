@@ -1,17 +1,12 @@
 import NodeRSA from 'node-rsa';
 
-import { RSA_KEYS } from '../../keys';
 import { SessionStore } from '../../utils/sessions';
 import { KeyModel } from './model';
 
 const ownKeys = new NodeRSA({ b: 2064 });
 
-ownKeys.importKey(RSA_KEYS.PRIVATE, "private");
-
-ownKeys.importKey(RSA_KEYS.PUBLIC, "public");
-
 export const getPublicKey = () => {
-  return RSA_KEYS.PUBLIC;
+  return ownKeys.exportKey("public");
 };
 
 export const authenticate = async (publicKey: string) => {
