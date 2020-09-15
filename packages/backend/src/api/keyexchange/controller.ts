@@ -6,7 +6,7 @@ import * as service from './service';
 
 const { body } = require("express-validator");
 
-export const getPublicKey = (_: Request, res: Response) => {
+export const getPublicKey = (req: Request, res: Response) => {
   try {
     const publicKey = service.getPublicKey();
     return res.json({ publicKey });
@@ -18,9 +18,24 @@ export const getPublicKey = (_: Request, res: Response) => {
 export const authenticateValidation = ValidationUtils.validate([body("publicKey").notEmpty().isString()]);
 export const authenticate = async (req: Request, res: Response) => {
   try {
-    const plainSessionId = await service.authenticate(req.body.publicKey);
-    const sessionId = service.encrypt(plainSessionId, req.body.publicKey);
-    return res.json({ sessionId });
+    const plainAuthenticator = await service.initiateAuthentication(req.sessionID!, req.body.publicKey);
+    const authenticator = service.encrypt(plainAuthenticator, req.body.publicKey);
+    return res.json({ authenticator });
+  } catch (ex) {
+    return responses.error(res, ex);
+  }
+};
+
+export const validateAuthenticationValidation = ValidationUtils.validate([body("authenticator").notEmpty().isString()]);
+export const validateAuthentication = async (req: Request, res: Response) => {
+  try {
+    const plainAuthenticator = service.decrypt(req.body.authenticator);
+    const isValid = service.validateAuthentication(req.sessionID!, plainAuthenticator);
+    if (isValid) {
+      return res.send(responses.success);
+    } else {
+      return responses.error(res, new Error("Authenticator not valid!"));
+    }
   } catch (ex) {
     return responses.error(res, ex);
   }

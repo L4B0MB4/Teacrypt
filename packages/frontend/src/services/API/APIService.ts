@@ -12,7 +12,7 @@ export const requestAPI = async <T extends unknown>(
       "content-type": "application/json",
       accept: "json",
     },
-    credentials: "same-origin",
+    credentials: "include",
   };
 
   if (config.method !== "GET") {

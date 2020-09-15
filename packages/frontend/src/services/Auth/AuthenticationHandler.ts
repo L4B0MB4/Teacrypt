@@ -1,37 +1,36 @@
-import NodeRSA from 'node-rsa';
-
 import { requestAPI } from '../API/APIService';
+import { EncryptionHandler } from '../Encryption/EncryptionHandler';
 
 class AuthenticationHandlerC {
-  rsaKey: NodeRSA;
-  serverRsa: NodeRSA = new NodeRSA();
-
-  sessionId?: string;
+  PATH = "/keyexchange";
   constructor() {
     // this will be done with chrome.store soon
     const pubk = localStorage.getItem("publicKey");
     const prik = localStorage.getItem("privateKey");
     if (pubk && prik) {
-      this.rsaKey = new NodeRSA();
-      this.rsaKey.importKey(pubk, "public");
-      this.rsaKey.importKey(prik, "private");
+      EncryptionHandler.importKey(pubk, "public");
+      EncryptionHandler.importKey(prik, "private");
     } else {
-      this.rsaKey = new NodeRSA({ b: 2048 });
-      localStorage.setItem("publicKey", this.rsaKey.exportKey("public"));
-      localStorage.setItem("privateKey", this.rsaKey.exportKey("private"));
+      EncryptionHandler.createNewRSA();
+      localStorage.setItem("publicKey", EncryptionHandler.exportKey("public"));
+      localStorage.setItem("privateKey", EncryptionHandler.exportKey("private"));
     }
   }
 
   authenticate = async () => {
-    const res = await requestAPI<{ publicKey: string }>("GET", "/keyexchange/public-key");
+    const res = await requestAPI<{ publicKey: string }>("GET", `${this.PATH}/public-key`);
     if (res && res.publicKey) {
-      this.serverRsa.importKey(res.publicKey, "public");
-      const authRes = await requestAPI<{ sessionId: string }>("POST", "/keyexchange/authenticate", {
-        publicKey: this.rsaKey.exportKey("public"),
+      EncryptionHandler.importKey(res.publicKey, "public", true);
+      const authRes = await requestAPI<{ authenticator: string }>("POST", `${this.PATH}/authenticate`, {
+        publicKey: EncryptionHandler.exportKey("public"),
       });
-      if (authRes && authRes.sessionId) {
-        this.sessionId = this.rsaKey.decrypt(authRes.sessionId, "utf8");
-        console.log(this.sessionId);
+      if (authRes && authRes.authenticator) {
+        const plainAuthenticator = EncryptionHandler.decrypt(authRes.authenticator);
+        const authenticator = EncryptionHandler.encrypt(plainAuthenticator);
+        const validationRes = await requestAPI<{ success: boolean }>("POST", `${this.PATH}/validate`, {
+          authenticator,
+        });
+        console.log(validationRes);
       }
     }
   };
