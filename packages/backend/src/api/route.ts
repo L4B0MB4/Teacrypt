@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 
 import { responses } from '../utils/responses';
 import { authenticationRouter } from './authentication/route';
+import { keyExchangeRouter } from './keyexchange/route';
 
 export const ApiRouter = express.Router();
 
@@ -14,7 +15,7 @@ ApiRouter.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 const hasSessionUser = (req: Request, res: Response, next: NextFunction) => {
-  if (req.sessionUser) {
+  if (req.session.sessionUser) {
     next();
   } else {
     return responses.missingSessionUser(res);
@@ -25,4 +26,4 @@ ApiRouter.use("/authentication", authenticationRouter);
 
 ApiRouter.use(hasSessionUser);
 
-ApiRouter.use("/keyexchange", authenticationRouter);
+ApiRouter.use("/keyexchange", keyExchangeRouter);

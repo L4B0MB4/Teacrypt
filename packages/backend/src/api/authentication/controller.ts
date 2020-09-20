@@ -32,9 +32,9 @@ export const validateAuthentication = async (req: Request, res: Response) => {
     const plainAuthenticator = service.decrypt(req.body.authenticator);
     const isValid = service.validateAuthentication(req.sessionID!, plainAuthenticator);
     if (isValid) {
-      req.sessionIsValid = true;
-      req.sessionUser = await service.getUser(req.sessionID);
-      return res.send({ userId: req.sessionUser.id });
+      req.session.sessionIsValid = true;
+      req.session.sessionUser = await service.getUser(req.sessionID);
+      return res.send({ userId: req.session.sessionUser.id });
     } else {
       return responses.error(res, new Error("Authenticator not valid!"));
     }

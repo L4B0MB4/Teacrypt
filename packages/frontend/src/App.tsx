@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Communication } from './background/communication';
 import { MSG, StatusPayload } from './background/types';
 import { AuthenticationHandler } from './services/Auth/AuthenticationHandler';
+import { KeyEchangeHandler } from './services/KeyExchange/KeyExchangeHandler';
 
 const onChangeInput = () => {
   const val = (document.getElementById("onoffStatus") as HTMLInputElement).checked;
@@ -28,6 +29,8 @@ function App() {
         )}
         <label>An/Aus encryption</label>
         <input id="onoffStatus" onClick={onChangeInput} value="" type="checkbox" />
+
+        <button onClick={KeyEchangeHandler.share}>Share</button>
       </header>
     </div>
   );
