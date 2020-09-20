@@ -2,7 +2,8 @@ import { requestAPI } from '../API/APIService';
 import { EncryptionHandler } from '../Encryption/EncryptionHandler';
 
 class AuthenticationHandlerC {
-  PATH = "/keyexchange";
+  userId?: string;
+  PATH = "/authentication";
   constructor() {
     // this will be done with chrome.store soon
     const pubk = localStorage.getItem("publicKey");
@@ -17,7 +18,7 @@ class AuthenticationHandlerC {
     }
   }
 
-  authenticate = async () => {
+  authenticate = async (setUserId: (id: string) => void) => {
     const res = await requestAPI<{ publicKey: string }>("GET", `${this.PATH}/public-key`);
     if (res && res.publicKey) {
       EncryptionHandler.importKey(res.publicKey, "public", true);
@@ -27,10 +28,13 @@ class AuthenticationHandlerC {
       if (authRes && authRes.authenticator) {
         const plainAuthenticator = EncryptionHandler.decrypt(authRes.authenticator);
         const authenticator = EncryptionHandler.encrypt(plainAuthenticator);
-        const validationRes = await requestAPI<{ success: boolean }>("POST", `${this.PATH}/validate`, {
+        const validationRes = await requestAPI<{ userId: string }>("POST", `${this.PATH}/validate`, {
           authenticator,
         });
-        console.log(validationRes);
+        if (validationRes && validationRes.userId) {
+          this.userId = validationRes.userId;
+          setUserId(this.userId);
+        }
       }
     }
   };

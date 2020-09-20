@@ -1,8 +1,8 @@
-import NodeRSA from "node-rsa";
+import NodeRSA from 'node-rsa';
 
-import * as Service from "./service";
+import * as Service from './service';
 
-describe("Keyexchange Service", () => {
+describe("Authentication Service", () => {
   it("encryption should generate same results", () => {
     const keys = new NodeRSA({ b: 512 });
     const encrypted = Service.encrypt("hello", keys.exportKey("public"));

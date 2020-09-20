@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Communication } from './background/communication';
 import { MSG, StatusPayload } from './background/types';
@@ -9,9 +9,10 @@ const onChangeInput = () => {
   Communication.sendMessage(MSG.ONOFF, { status: val });
 };
 
-AuthenticationHandler.authenticate();
 function App() {
+  const [userId, setUserId] = useState<string | undefined>();
   useEffect(() => {
+    AuthenticationHandler.authenticate(setUserId);
     Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
       (document.getElementById("onoffStatus") as HTMLInputElement).checked = data.status;
     });
@@ -19,6 +20,12 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        {userId && (
+          <>
+            <div>{userId}</div>
+            <br />
+          </>
+        )}
         <label>An/Aus encryption</label>
         <input id="onoffStatus" onClick={onChangeInput} value="" type="checkbox" />
       </header>
