@@ -1,7 +1,6 @@
-import { aesHelper } from '@teacrypt/common';
+import { aesHelper, ComHelp } from '@teacrypt/common';
 
 import { Communication } from './communication/injected/communication';
-import { MSG, OwnIdentifierPayload, StatusPayload } from './communication/types';
 import Store from './encryption/store';
 import { goOverTeamsChatMessages } from './Teams/teams';
 
@@ -41,7 +40,7 @@ const goOverChat = () => {
   if (isActive) {
     goOverTeamsChatMessages();
   }
-  Communication.sendMessage(MSG.ONOFF, { status: isActive });
+  Communication.sendMessage(ComHelp.MSG.ONOFF, { status: isActive });
   setTimeout(goOverChat, 500);
 };
 
@@ -68,10 +67,10 @@ function writeIntoTextbox() {
   });
 }
 
-Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
+Communication.addListener(ComHelp.MSG.ONOFF, (data: ComHelp.StatusPayload) => {
   isActive = data.status;
 });
 
-Communication.addListener(MSG.OWN_IDENTIFIER, (data: OwnIdentifierPayload) => {
+Communication.addListener(ComHelp.MSG.OWN_IDENTIFIER, (data: ComHelp.OwnIdentifierPayload) => {
   console.log(data);
 });

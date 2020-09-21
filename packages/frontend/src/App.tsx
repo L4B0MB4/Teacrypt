@@ -1,13 +1,13 @@
+import { ComHelp } from '@teacrypt/common';
 import React, { useEffect, useState } from 'react';
 
 import { Communication } from './background/communication';
-import { MSG, StatusPayload } from './background/types';
 import { AuthenticationHandler } from './services/Auth/AuthenticationHandler';
 import { KeyEchangeHandler } from './services/KeyExchange/KeyExchangeHandler';
 
 const onChangeInput = () => {
   const val = (document.getElementById("onoffStatus") as HTMLInputElement).checked;
-  Communication.sendMessage(MSG.ONOFF, { status: val });
+  Communication.sendMessage(ComHelp.MSG.ONOFF, { status: val });
 };
 
 function App() {
@@ -16,10 +16,11 @@ function App() {
     AuthenticationHandler.authenticate().then((uId) => {
       if (uId) {
         setUserId(uId);
+        Communication.emit(ComHelp.MSG.OWN_IDENTIFIER, { id: uId });
         KeyEchangeHandler.getParticipantKeys();
       }
     });
-    Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
+    Communication.addListener(ComHelp.MSG.ONOFF, (data: ComHelp.StatusPayload) => {
       (document.getElementById("onoffStatus") as HTMLInputElement).checked = data.status;
     });
   }, []);

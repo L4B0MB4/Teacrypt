@@ -1,9 +1,9 @@
-import { FROM } from '../types';
+import { ComHelp } from '@teacrypt/common';
 
 export const initCommunication = () => {
   //for background initiated messages
   chrome.runtime.onMessage.addListener((request) => {
-    if (request.from === FROM.BACKGROUND) {
+    if (request.from === ComHelp.FROM.BACKGROUND) {
       window.postMessage(request, "*");
     }
     return true;
@@ -23,7 +23,7 @@ export const initCommunication = () => {
     }
 
     //prevent looping messages
-    if (message.from === FROM.BACKGROUND || !message.from) {
+    if (message.from === ComHelp.FROM.BACKGROUND || !message.from) {
       return;
     }
     chrome.runtime.sendMessage(message, (response) => {
@@ -32,7 +32,7 @@ export const initCommunication = () => {
       }
 
       //prevent looping messages
-      if (response.from === FROM.WEBPAGE) {
+      if (response.from === ComHelp.FROM.WEBPAGE) {
         return;
       }
       window.postMessage(response, "*");
