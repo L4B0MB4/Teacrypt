@@ -1,10 +1,10 @@
 import NodeRSA from 'node-rsa';
 
 class EncryptionHandlerC {
-  rsaKey: NodeRSA = new NodeRSA();
-  serverRsa: NodeRSA = new NodeRSA();
+  private rsaKey: NodeRSA = new NodeRSA();
+  private serverRsa: NodeRSA = new NodeRSA();
 
-  userKeys: Array<{ id: string; publicKey: NodeRSA.Key }> = [];
+  private userKeys: Array<{ id: string; publicKey?: NodeRSA.Key; aes?: string }> = [];
 
   createNewRSA = () => {
     this.rsaKey = new NodeRSA({ b: 2048 });
@@ -43,7 +43,7 @@ class EncryptionHandlerC {
         return this.serverRsa.encrypt(toEncrypt, "base64");
       } else {
         const found = this.userKeys.find((item) => item.id === userId);
-        if (found) {
+        if (found && found.publicKey) {
           const tempRSA = new NodeRSA();
           tempRSA.importKey(found.publicKey, "public");
           return tempRSA.encrypt(toEncrypt, "base64");
@@ -52,6 +52,19 @@ class EncryptionHandlerC {
         }
       }
     }
+  };
+
+  addAesKey = (userId: string, aes: string) => {
+    const found = this.userKeys.find((item) => item.id === userId);
+    if (found) {
+      found.aes = aes;
+    } else {
+      this.userKeys.push({ id: userId, aes });
+    }
+  };
+
+  getAesKey = (userId: string) => {
+    return this.userKeys.find((item) => item.id === userId);
   };
 }
 

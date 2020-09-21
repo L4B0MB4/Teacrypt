@@ -18,7 +18,7 @@ class AuthenticationHandlerC {
     }
   }
 
-  authenticate = async (setUserId: (id: string) => void) => {
+  authenticate = async () => {
     const res = await requestAPI<{ publicKey: string }>("GET", `${this.PATH}/public-key`);
     if (res && res.publicKey) {
       EncryptionHandler.importKey(res.publicKey, "public", true);
@@ -33,7 +33,7 @@ class AuthenticationHandlerC {
         });
         if (validationRes && validationRes.userId) {
           this.userId = validationRes.userId;
-          setUserId(this.userId);
+          return this.userId;
         }
       }
     }

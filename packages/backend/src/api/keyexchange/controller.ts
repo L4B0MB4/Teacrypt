@@ -41,3 +41,13 @@ export const getPublicKey = async (req: Request, res: Response) => {
     return res.status(400).json({ status: 400, message: ex.message });
   }
 };
+
+export const getParticipantKeys = async (req: Request, res: Response) => {
+  try {
+    const user = await authService.getUser(req.session.id);
+    const participantKeys = await service.getParticipantKeys(user._id);
+    return res.send(participantKeys);
+  } catch (ex) {
+    return res.status(400).json({ status: 400, message: ex.message });
+  }
+};

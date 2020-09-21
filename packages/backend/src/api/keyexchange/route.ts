@@ -8,3 +8,5 @@ keyExchangeRouter.post("/sharekey", controller.shareAESKeyValidation, controller
 
 /* ToDo: path params*/
 keyExchangeRouter.get("/getPublicKey", controller.getPublicKeyValidation, controller.getPublicKey);
+
+keyExchangeRouter.get("/participantkeys", controller.getParticipantKeys);

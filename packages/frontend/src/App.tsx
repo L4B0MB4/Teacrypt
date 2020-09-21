@@ -13,7 +13,12 @@ const onChangeInput = () => {
 function App() {
   const [userId, setUserId] = useState<string | undefined>();
   useEffect(() => {
-    AuthenticationHandler.authenticate(setUserId);
+    AuthenticationHandler.authenticate().then((uId) => {
+      if (uId) {
+        setUserId(uId);
+        KeyEchangeHandler.getParticipantKeys();
+      }
+    });
     Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
       (document.getElementById("onoffStatus") as HTMLInputElement).checked = data.status;
     });

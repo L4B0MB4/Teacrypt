@@ -1,3 +1,5 @@
+import { Schema } from 'mongoose';
+
 import { IUser, UserModel } from '../authentication/model';
 import { KeyModel } from './model';
 
@@ -25,4 +27,13 @@ export const shareAESKey = async (sharerKey: string, participantKey: string, par
     keyMParticipant.save();
   }
   return true;
+};
+
+export const getParticipantKeys = async (_id: Schema.Types.ObjectId) => {
+  const keys = await KeyModel.find({ sharer: _id }).populate("participant");
+  if (keys) {
+    return keys.map((item) => ({ participantId: (item.participant as IUser).id, aesKey: item.sharerKey }));
+  } else {
+    return [];
+  }
 };
