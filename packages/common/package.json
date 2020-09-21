@@ -6,7 +6,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "prepare": "tsc",
-    "start": "tsc -b --watch ",
+    "start": "tsc -w ",
     "build": "tsc"
   },
   "repository": {

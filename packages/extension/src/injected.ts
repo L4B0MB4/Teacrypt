@@ -5,6 +5,7 @@ import Store from './encryption/store';
 import { goOverTeamsChatMessages } from './Teams/teams';
 
 let isActive = false;
+let ownId: string | undefined;
 
 Store.addKey(aesHelper.STATIC_DEV_KEY_IV, "chatIdent");
 
@@ -46,6 +47,7 @@ const goOverChat = () => {
 
 function writeIntoTextbox() {
   console.log("starting mission");
+  getOwnId();
   goOverChat();
   let listenerComplete = textbox.lastListenerInfo.find((item) => item.type === "keydown");
   if (!listenerComplete) {
@@ -67,10 +69,20 @@ function writeIntoTextbox() {
   });
 }
 
+const getOwnId = () => {
+  if (!ownId) {
+    Communication.sendMessage(ComHelp.MSG.GET_OWN_IDENTIFIER);
+    setTimeout(getOwnId, 500);
+  }
+};
+
 Communication.addListener(ComHelp.MSG.ONOFF, (data: ComHelp.StatusPayload) => {
   isActive = data.status;
 });
 
 Communication.addListener(ComHelp.MSG.OWN_IDENTIFIER, (data: ComHelp.OwnIdentifierPayload) => {
   console.log(data);
+  if (data.id) {
+    ownId = data.id;
+  }
 });

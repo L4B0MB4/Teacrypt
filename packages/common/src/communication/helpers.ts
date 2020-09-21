@@ -4,10 +4,11 @@ export const FROM = {
 };
 
 export const MSG = {
-  ONOFF: "onoff",
-  OWN_IDENTIFIER: "ownIdentifier",
+  ONOFF: "ONOFF",
+  OWN_IDENTIFIER: "OWN_IDENTIFIER",
+  GET_OWN_IDENTIFIER: "GET_OWN_IDENTIFIER",
 };
 
 export type StatusPayload = { status: boolean };
 
-export type OwnIdentifierPayload = { id: string };
+export type OwnIdentifierPayload = { id?: string };

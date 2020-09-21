@@ -16,8 +16,8 @@ class CommunicationC extends EventListener {
     };
   };
 
-  sendMessage = (type: string, data: any) => {
-    window.postMessage({ from: ComHelp.FROM.WEBPAGE, type, data }, "*");
+  sendMessage = (type: string, data?: any) => {
+    window.postMessage({ from: ComHelp.FROM.WEBPAGE, type, data: data || {} }, "*");
   };
 }
 

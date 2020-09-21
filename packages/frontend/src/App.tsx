@@ -16,14 +16,16 @@ function App() {
     AuthenticationHandler.authenticate().then((uId) => {
       if (uId) {
         setUserId(uId);
-        Communication.emit(ComHelp.MSG.OWN_IDENTIFIER, { id: uId });
         KeyEchangeHandler.getParticipantKeys();
       }
+    });
+    Communication.addListener(ComHelp.MSG.GET_OWN_IDENTIFIER, () => {
+      Communication.sendMessage(ComHelp.MSG.OWN_IDENTIFIER, { id: userId });
     });
     Communication.addListener(ComHelp.MSG.ONOFF, (data: ComHelp.StatusPayload) => {
       (document.getElementById("onoffStatus") as HTMLInputElement).checked = data.status;
     });
-  }, []);
+  }, [userId]);
   return (
     <div className="App">
       <header className="App-header">
