@@ -1,9 +1,7 @@
-import './encryption/aes';
-
 import { aesHelper } from '@teacrypt/common';
 
 import { Communication } from './communication/injected/communication';
-import { MSG, StatusPayload } from './communication/types';
+import { MSG, OwnIdentifierPayload, StatusPayload } from './communication/types';
 import Store from './encryption/store';
 import { goOverTeamsChatMessages } from './Teams/teams';
 
@@ -72,4 +70,8 @@ function writeIntoTextbox() {
 
 Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
   isActive = data.status;
+});
+
+Communication.addListener(MSG.OWN_IDENTIFIER, (data: OwnIdentifierPayload) => {
+  console.log(data);
 });

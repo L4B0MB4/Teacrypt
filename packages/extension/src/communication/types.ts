@@ -5,6 +5,9 @@ export const FROM = {
 
 export const MSG = {
   ONOFF: "onoff",
+  OWN_IDENTIFIER: "ownIdentifier",
 };
 
 export type StatusPayload = { status: boolean };
+
+export type OwnIdentifierPayload = { id: string };

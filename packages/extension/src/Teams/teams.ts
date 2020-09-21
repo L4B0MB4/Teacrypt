@@ -1,4 +1,5 @@
-import * as aesHelper from '../encryption/aes_helper';
+import { aesHelper } from '@teacrypt/common';
+
 import Store from '../encryption/store';
 import { getElementsByXPath } from '../utils/utils';
 
