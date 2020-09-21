@@ -12,9 +12,9 @@ export const shareAESKeyValidation = ValidationUtils.validate([
   body("participantKey").notEmpty().isString(),
   body("participantID").notEmpty().isString(),
 ]);
-export const shareAESKey = (req: Request, res: Response) => {
+export const shareAESKey = async (req: Request, res: Response) => {
   try {
-    const success = service.shareAESKey(
+    const success = await service.shareAESKey(
       req.body.sharerKey,
       req.body.participantKey,
       req.body.participantID,
@@ -31,7 +31,7 @@ export const getPublicKeyValidation = ValidationUtils.validate([check("userId").
 export const getPublicKey = async (req: Request, res: Response) => {
   try {
     const userId = req.query.userId.toString();
-    const user = await authService.getUser(userId);
+    const user = await authService.getUserById(userId);
     if (user) {
       return res.send({ publicKey: user.publicKey });
     } else {

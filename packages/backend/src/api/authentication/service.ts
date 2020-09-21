@@ -50,3 +50,7 @@ export const getUser = async (sessionID: string) => {
   }
   return null;
 };
+
+export const getUserById = async (id: string) => {
+  return await UserModel.findOne({ id });
+};

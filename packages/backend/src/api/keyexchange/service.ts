@@ -6,10 +6,23 @@ export const shareAESKey = async (sharerKey: string, participantKey: string, par
   if (!participant) {
     return false;
   }
-  const keyM = new KeyModel();
-  keyM.participant = participant._id;
-  keyM.sharer = sharer._id;
-  keyM.sharerKey = sharerKey;
-  keyM.participantKey = participantKey;
-  keyM.save();
+
+  if (!(await KeyModel.findOne({ participant: participant._id, sharer: sharer._id }))) {
+    const keyMSharer = new KeyModel();
+    keyMSharer.participant = participant._id;
+    keyMSharer.sharer = sharer._id;
+    keyMSharer.sharerKey = sharerKey;
+    keyMSharer.participantKey = participantKey;
+    keyMSharer.save();
+  }
+
+  if (!(await KeyModel.findOne({ participant: sharer._id, sharer: participant._id }))) {
+    const keyMParticipant = new KeyModel();
+    keyMParticipant.participant = sharer._id;
+    keyMParticipant.sharer = participant._id;
+    keyMParticipant.sharerKey = participantKey;
+    keyMParticipant.participantKey = sharerKey;
+    keyMParticipant.save();
+  }
+  return true;
 };
