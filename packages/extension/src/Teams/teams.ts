@@ -8,9 +8,12 @@ export const goOverTeamsChatMessages = () => {
   var messages = getElementsByXPath("//div[contains(text(), '" + aesHelper.TEACRYPT_PREFIX + "')]", selector);
   for (let i = 0; i < messages.length; i++) {
     if (!messages[i].className.includes("screen-reader-text")) {
-      const txt = aesHelper.decryptSimple(Store.getKey("chatIdent")!, messages[i].innerText);
-      if (txt) {
-        messages[i].innerText = txt;
+      const key = Store.getKey(aesHelper.extractUserId(messages[i].innerText));
+      if (key) {
+        const txt = aesHelper.decryptSimple(key, messages[i].innerText);
+        if (txt) {
+          messages[i].innerText = txt;
+        }
       }
     }
   }

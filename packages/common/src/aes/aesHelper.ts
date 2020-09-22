@@ -1,14 +1,19 @@
 import aesjs from 'aes-js';
 
-export const TEACRYPT_PREFIX = "teacrypt--";
+//no types
+var getRandomValues = require("get-random-values");
+
+export const TEACRYPT_PREFIX = "teacrypt::";
+export const TEACRYPT_USER_LENGTH = 19; //5 times 3 numbers + '-' minus last '-'
+export const TEACRYPT_SUFFFIX = "::";
 
 export const STATIC_DEV_KEY_IV = "a6cd62a0a46bed0df56368e4839b1c01_split_e8e40ab3d5baa806034cae343520ced8";
 
-export function generateKeyAndIV() {
-  var key = crypto.getRandomValues(new Uint8Array(16));
-  var iv = crypto.getRandomValues(new Uint8Array(16));
+export const generateKeyAndIV = () => {
+  var key = getRandomValues(new Uint8Array(16)) as Uint8Array;
+  var iv = getRandomValues(new Uint8Array(16)) as Uint8Array;
   return aesjs.utils.hex.fromBytes(key) + "_split_" + aesjs.utils.hex.fromBytes(iv);
-}
+};
 
 export function splitKeyAndIV(str: string) {
   if (!str) {
@@ -63,23 +68,33 @@ export const unpaddText = (str: string, base = 16) => {
   return str.substring(0, str.length - 1 - paddingLength);
 };
 
-export const encryptSimple = (keyIv: string, message: string) => {
+export const encryptSimple = (keyIv: string, message: string, userId: string) => {
   var keyIVObj = splitKeyAndIV(keyIv);
-  return TEACRYPT_PREFIX + encrypt(message, keyIVObj.key, keyIVObj.iv);
+  return TEACRYPT_PREFIX + userId + TEACRYPT_SUFFFIX + encrypt(message, keyIVObj.key, keyIVObj.iv);
 };
 
 export const decryptSimple = (keyIv: string, encryptedText: string) => {
-  if (!encryptedText.startsWith(TEACRYPT_PREFIX)) {
+  if (!encryptedText.includes(TEACRYPT_PREFIX)) {
     //No teacrypt encryption;
     return encryptedText;
   }
+  if (!encryptedText.startsWith(TEACRYPT_PREFIX)) {
+    encryptedText = encryptedText.substring(encryptedText.indexOf(TEACRYPT_PREFIX));
+  }
   try {
-    var encryptedTextSubstr = encryptedText.substring(TEACRYPT_PREFIX.length);
-    var keyIVObj = splitKeyAndIV(keyIv);
+    const encryptedTextSubstr = encryptedText.substring(
+      TEACRYPT_PREFIX.length + TEACRYPT_USER_LENGTH + TEACRYPT_SUFFFIX.length
+    );
+    const keyIVObj = splitKeyAndIV(keyIv);
     const decryptedPaddedText = decrypt(encryptedTextSubstr, keyIVObj.key, keyIVObj.iv);
     return unpaddText(decryptedPaddedText);
   } catch (ex) {
     console.warn("Key not valid");
   }
   return encryptedText;
+};
+
+export const extractUserId = (encryptedText: string) => {
+  const userID = encryptedText.substring(TEACRYPT_PREFIX.length, TEACRYPT_PREFIX.length + TEACRYPT_USER_LENGTH);
+  return userID;
 };

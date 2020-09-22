@@ -8,18 +8,12 @@ import * as service from './service';
 const { body, check } = require("express-validator");
 
 export const shareAESKeyValidation = ValidationUtils.validate([
-  body("sharerKey").notEmpty().isString(),
   body("participantKey").notEmpty().isString(),
   body("participantID").notEmpty().isString(),
 ]);
 export const shareAESKey = async (req: Request, res: Response) => {
   try {
-    const success = await service.shareAESKey(
-      req.body.sharerKey,
-      req.body.participantKey,
-      req.body.participantID,
-      req.session.sessionUser!
-    );
+    const success = await service.shareAESKey(req.body.participantKey, req.body.participantID, req.session.user!);
     return res.json({ success });
   } catch (ex) {
     return res.status(400).json({ status: 400, message: ex.message });
@@ -44,8 +38,7 @@ export const getPublicKey = async (req: Request, res: Response) => {
 
 export const getParticipantKeys = async (req: Request, res: Response) => {
   try {
-    const user = await authService.getUser(req.session.id);
-    const participantKeys = await service.getParticipantKeys(user._id);
+    const participantKeys = await service.getParticipantKeys(req.session.user._id);
     return res.send(participantKeys);
   } catch (ex) {
     return res.status(400).json({ status: 400, message: ex.message });

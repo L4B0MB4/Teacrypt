@@ -5,7 +5,7 @@ import Store from './encryption/store';
 import { goOverTeamsChatMessages } from './Teams/teams';
 
 let isActive = false;
-let ownId: string | undefined;
+export let ownId: string | undefined;
 
 Store.addKey(aesHelper.STATIC_DEV_KEY_IV, "chatIdent");
 
@@ -58,11 +58,10 @@ function writeIntoTextbox() {
   textbox.removeEventListener("keydown", listener);
 
   textbox.addEventListener("keydown", function (e) {
-    console.log(isActive);
     if (e.key === "Enter" && isActive) {
-      const key = Store.getKey("chatIdent");
+      const key = Store.getKey(ownId);
       if (key) {
-        textbox.innerHTML = aesHelper.encryptSimple(key, textbox.innerText);
+        textbox.innerHTML = aesHelper.encryptSimple(key, textbox.innerText, ownId);
       }
     }
     listener(e);
@@ -81,8 +80,17 @@ Communication.addListener(ComHelp.MSG.ONOFF, (data: ComHelp.StatusPayload) => {
 });
 
 Communication.addListener(ComHelp.MSG.OWN_IDENTIFIER, (data: ComHelp.OwnIdentifierPayload) => {
-  console.log(data);
   if (data.id) {
     ownId = data.id;
+    Store.addKey(data.aesKey, data.id);
+  }
+});
+
+Communication.addListener(ComHelp.MSG.PARICIPANT_KEYS, (data: ComHelp.ParticipantKeysPayload) => {
+  console.log(data);
+  if (data && data.length) {
+    data.forEach((item) => {
+      Store.addKey(item.aesKey, item.id);
+    });
   }
 });

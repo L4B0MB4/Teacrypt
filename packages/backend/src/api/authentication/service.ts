@@ -1,3 +1,4 @@
+import { aesHelper } from '@teacrypt/common';
 import NodeRSA from 'node-rsa';
 
 import { SessionStore } from '../../utils/session';
@@ -19,6 +20,7 @@ export const initiateAuthentication = async (sessionID: string, publicKey: strin
     const userM = new UserModel();
     userM.publicKey = publicKey;
     userM.id = createId();
+    userM.aesKey = encrypt(aesHelper.generateKeyAndIV(), publicKey);
     await userM.save();
     return SessionStore.getOrGenerateSession(sessionID, userM.publicKey).authenticator;
   }

@@ -28,10 +28,11 @@ class AuthenticationHandlerC {
       if (authRes && authRes.authenticator) {
         const plainAuthenticator = EncryptionHandler.decrypt(authRes.authenticator);
         const authenticator = EncryptionHandler.encrypt(plainAuthenticator);
-        const validationRes = await requestAPI<{ userId: string }>("POST", `${this.PATH}/validate`, {
+        const validationRes = await requestAPI<{ userId: string; aesKey: string }>("POST", `${this.PATH}/validate`, {
           authenticator,
         });
-        if (validationRes && validationRes.userId) {
+        if (validationRes && validationRes.userId && validationRes.aesKey) {
+          EncryptionHandler.addAesKey(validationRes.userId, EncryptionHandler.decrypt(validationRes.aesKey));
           this.userId = validationRes.userId;
           return this.userId;
         }

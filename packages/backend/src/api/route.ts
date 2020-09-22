@@ -15,7 +15,7 @@ ApiRouter.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 const hasSessionUser = (req: Request, res: Response, next: NextFunction) => {
-  if (req.session.sessionUser) {
+  if (req.session.user) {
     next();
   } else {
     return responses.missingSessionUser(res);

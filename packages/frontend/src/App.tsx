@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Communication } from './background/communication';
 import { AuthenticationHandler } from './services/Auth/AuthenticationHandler';
+import { EncryptionHandler } from './services/Encryption/EncryptionHandler';
 import { KeyEchangeHandler } from './services/KeyExchange/KeyExchangeHandler';
 
 const onChangeInput = () => {
@@ -13,18 +14,29 @@ const onChangeInput = () => {
 function App() {
   const [userId, setUserId] = useState<string | undefined>();
   useEffect(() => {
-    AuthenticationHandler.authenticate().then((uId) => {
-      if (uId) {
-        setUserId(uId);
-        KeyEchangeHandler.getParticipantKeys();
-      }
-    });
-    Communication.addListener(ComHelp.MSG.GET_OWN_IDENTIFIER, () => {
-      Communication.sendMessage(ComHelp.MSG.OWN_IDENTIFIER, { id: userId });
-    });
-    Communication.addListener(ComHelp.MSG.ONOFF, (data: ComHelp.StatusPayload) => {
-      (document.getElementById("onoffStatus") as HTMLInputElement).checked = data.status;
-    });
+    if (!userId) {
+      AuthenticationHandler.authenticate().then((uId) => {
+        if (uId) {
+          setUserId(uId);
+          setInterval(() => {
+            KeyEchangeHandler.getParticipantKeys().then(() => {
+              Communication.sendMessage(ComHelp.MSG.PARICIPANT_KEYS, EncryptionHandler.getAllParticipantAesKeys());
+            });
+          }, 5000);
+        }
+      });
+      Communication.addListener(ComHelp.MSG.GET_OWN_IDENTIFIER, () => {
+        if (AuthenticationHandler.userId) {
+          Communication.sendMessage(ComHelp.MSG.OWN_IDENTIFIER, {
+            id: AuthenticationHandler.userId,
+            aesKey: EncryptionHandler.getAesKey(AuthenticationHandler.userId)!,
+          });
+        }
+      });
+      Communication.addListener(ComHelp.MSG.ONOFF, (data: ComHelp.StatusPayload) => {
+        (document.getElementById("onoffStatus") as HTMLInputElement).checked = data.status;
+      });
+    }
   }, [userId]);
   return (
     <div className="App">

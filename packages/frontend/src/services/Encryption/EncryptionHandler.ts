@@ -64,7 +64,15 @@ class EncryptionHandlerC {
   };
 
   getAesKey = (userId: string) => {
-    return this.userKeys.find((item) => item.id === userId);
+    return this.userKeys.find((item) => item.id === userId)?.aes;
+  };
+
+  getAllParticipantAesKeys = () => {
+    return this.userKeys
+      .filter((item) => item.aes)
+      .map((item) => {
+        return { id: item.id, aesKey: item.aes };
+      });
   };
 }
 
