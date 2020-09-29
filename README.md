@@ -36,3 +36,7 @@ Also encrypted messaged should have a prefix to prevent plain messages to be wro
 ## Ideas for the future:
 
 Right click on textbox to activate teacrypt anywhere
+
+## Supported node versions
+
+12.x and 14.x
