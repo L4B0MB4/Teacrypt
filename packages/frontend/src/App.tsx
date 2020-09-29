@@ -1,15 +1,14 @@
 import { ComHelp } from '@teacrypt/common';
 import React, { useEffect, useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
+import Container from 'react-bootstrap/Container';
 
 import { Communication } from './background/communication';
+import { EnableEncryption } from './components/EnableEncryption/EnableEncryption';
+import { SharerInput } from './components/ShareInput/ShareInput';
 import { AuthenticationHandler } from './services/Auth/AuthenticationHandler';
 import { EncryptionHandler } from './services/Encryption/EncryptionHandler';
 import { KeyEchangeHandler } from './services/KeyExchange/KeyExchangeHandler';
-
-const onChangeInput = () => {
-  const val = (document.getElementById("onoffStatus") as HTMLInputElement).checked;
-  Communication.sendMessage(ComHelp.MSG.ONOFF, { status: val });
-};
 
 function App() {
   const [userId, setUserId] = useState<string | undefined>();
@@ -33,26 +32,22 @@ function App() {
           });
         }
       });
-      Communication.addListener(ComHelp.MSG.ONOFF, (data: ComHelp.StatusPayload) => {
-        (document.getElementById("onoffStatus") as HTMLInputElement).checked = data.status;
-      });
     }
   }, [userId]);
   return (
-    <div className="App">
-      <header className="App-header">
-        {userId && (
-          <>
-            <div>{userId}</div>
-            <br />
-          </>
-        )}
-        <label>An/Aus encryption</label>
-        <input id="onoffStatus" onClick={onChangeInput} value="" type="checkbox" />
-
-        <button onClick={KeyEchangeHandler.share}>Share</button>
-      </header>
-    </div>
+    <Container>
+      <br />
+      {userId && (
+        <>
+          <Alert variant={"primary"}>
+            <Alert.Heading className="text-center">{userId}</Alert.Heading>
+          </Alert>
+        </>
+      )}
+      <EnableEncryption />
+      <br />
+      <SharerInput />
+    </Container>
   );
 }
 

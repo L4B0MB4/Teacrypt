@@ -5,9 +5,11 @@ import { EncryptionHandler } from '../Encryption/EncryptionHandler';
 class KeyEchangeHandlerC {
   PATH = "/keyexchange";
 
-  share = async () => {
+  share = async (userShare: string) => {
+    if (!userShare) {
+      return;
+    }
     if (!AuthenticationHandler.userId) return;
-    const userShare = "392-181-355-662-631";
     const res = await requestAPI<{ publicKey: string }>("GET", this.PATH + "/getPublicKey", {
       userId: userShare,
     });
