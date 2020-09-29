@@ -10,9 +10,7 @@ class KeyEchangeHandlerC {
       return;
     }
     if (!AuthenticationHandler.userId) return;
-    const res = await requestAPI<{ publicKey: string }>("GET", this.PATH + "/getPublicKey", {
-      userId: userShare,
-    });
+    const res = await requestAPI<{ publicKey: string }>("GET", `${this.PATH}/${userShare}/publicKey`);
     if (!res?.publicKey) {
       throw new Error("Share wasn't successfull");
     }

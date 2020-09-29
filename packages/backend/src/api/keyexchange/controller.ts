@@ -24,7 +24,7 @@ export const getPublicKeyValidation = ValidationUtils.validate([check("userId").
 
 export const getPublicKey = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.userId.toString();
+    const userId = req.params.userId.toString();
     const user = await authService.getUserById(userId);
     if (user) {
       return res.send({ publicKey: user.publicKey });
