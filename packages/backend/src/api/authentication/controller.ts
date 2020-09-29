@@ -11,7 +11,7 @@ export const getPublicKey = (req: Request, res: Response) => {
     const publicKey = service.getPublicKey();
     return res.json({ publicKey });
   } catch (ex) {
-    return res.status(400).json({ status: 400, message: ex.message });
+    return responses.error(res, ex);
   }
 };
 

@@ -5,7 +5,7 @@ import { SessionStore } from '../../utils/session';
 import { createId } from '../../utils/utils';
 import { UserModel } from './model';
 
-const ownKeys = new NodeRSA({ b: 2064 });
+const ownKeys = new NodeRSA({ b: 2048 });
 
 export const getPublicKey = () => {
   return ownKeys.exportKey("public");

@@ -13,7 +13,7 @@ Clone the repo in packages/backend/ and rename it "config" to use the teacrypt-c
 
 ## Weird behaviour
 
-Somehow the keyexchange is not happening if you focus the dev-console instead of the teams page. Make sure to click on the teams page if you are debugging.
+Somehow the cross-communication is not happening if you focus the dev-console instead of the teams page. Make sure to click on the teams page if you are debugging.
 
 ## How to use in dev:
 

@@ -16,7 +16,7 @@ export const shareAESKey = async (req: Request, res: Response) => {
     const success = await service.shareAESKey(req.body.participantKey, req.body.participantID, req.session.user!);
     return res.json({ success });
   } catch (ex) {
-    return res.status(400).json({ status: 400, message: ex.message });
+    return responses.error(res, ex);
   }
 };
 
@@ -32,7 +32,7 @@ export const getPublicKey = async (req: Request, res: Response) => {
       return responses.notFound(res, new Error("Could not find a user with id:" + userId));
     }
   } catch (ex) {
-    return res.status(400).json({ status: 400, message: ex.message });
+    return responses.error(res, ex);
   }
 };
 
@@ -41,6 +41,6 @@ export const getParticipantKeys = async (req: Request, res: Response) => {
     const participantKeys = await service.getParticipantKeys(req.session.user._id);
     return res.send(participantKeys);
   } catch (ex) {
-    return res.status(400).json({ status: 400, message: ex.message });
+    return responses.error(res, ex);
   }
 };
