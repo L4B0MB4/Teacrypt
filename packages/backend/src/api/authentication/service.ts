@@ -27,7 +27,7 @@ export const initiateAuthentication = async (sessionID: string, publicKey: strin
 };
 
 export const validateAuthentication = (sessionID: string, authenticator: string) => {
-  if (authenticator === SessionStore.getSession(sessionID).authenticator) {
+  if (authenticator === SessionStore.getSession(sessionID)?.authenticator) {
     SessionStore.validateSession(sessionID);
     return true;
   } else {

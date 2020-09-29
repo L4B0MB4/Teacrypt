@@ -5,11 +5,11 @@ export const generateId = () => {
     return v.toString(16);
   });
 };
-
+type localSession = { publicKey: string; authenticator: string; isValid: boolean };
 export class SessionStoreC {
-  sessions: Record<string, { publicKey: string; authenticator: string; isValid: boolean }> = {};
+  sessions: Record<string, localSession> = {};
 
-  getSession = (sessionID: string) => {
+  getSession = (sessionID: string): localSession | undefined => {
     return this.sessions[sessionID];
   };
   setSession = (sessionID: string, publicKey: string) => {
