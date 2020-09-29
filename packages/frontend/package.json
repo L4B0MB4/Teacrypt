@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@teacrypt/common": "^1.0.0",
-    "@types/react-bootstrap": "^0.32.23",
     "bootstrap": "^4.5.2",
     "node-rsa": "^1.1.1",
     "query-string": "^6.13.2",
