@@ -6,7 +6,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "prepare": "tsc",
-    "start": "tsc -b --watch ",
+    "start": "tsc -w ",
     "build": "tsc"
   },
   "repository": {
@@ -28,6 +28,9 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "@types/testing-library__dom": "^7.5.0"
+    "@types/aes-js": "^3.1.1",
+    "@types/testing-library__dom": "^7.5.0",
+    "aes-js": "^3.1.2",
+    "get-random-values": "^1.2.2"
   }
 }
