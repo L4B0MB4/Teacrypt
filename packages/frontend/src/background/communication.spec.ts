@@ -1,7 +1,8 @@
 import 'jest-webextension-mock';
 
+import { ComHelp } from '@teacrypt/common';
+
 import { Communication } from './communication';
-import { FROM } from './types';
 
 describe("Background Communication", () => {
   it("Testing basic event listening", () => {
@@ -25,7 +26,7 @@ describe("Background Communication", () => {
     Communication.addListener("x", listener);
     chrome.runtime.sendMessage({ type: "y" });
     expect(listener).not.toBeCalled();
-    chrome.runtime.sendMessage({ type: "x", from: FROM.WEBPAGE });
+    chrome.runtime.sendMessage({ type: "x", from: ComHelp.FROM.WEBPAGE });
     expect(listener).toBeCalled();
   });
 });

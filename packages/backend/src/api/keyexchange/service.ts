@@ -1,36 +1,30 @@
-import NodeRSA from 'node-rsa';
+import { Schema } from 'mongoose';
 
-import { SessionStore } from '../../utils/sessions';
+import { IUser, UserModel } from '../authentication/model';
 import { KeyModel } from './model';
 
-const ownKeys = new NodeRSA({ b: 2064 });
-
-export const getPublicKey = () => {
-  return ownKeys.exportKey("public");
-};
-
-export const authenticate = async (publicKey: string) => {
-  new NodeRSA(publicKey, "public");
-  const result = await KeyModel.findOne({ publicKey });
-  if (result) {
-    return SessionStore.getOrGenerateSession(result.publicKey);
-  } else {
-    const keyM = new KeyModel();
-    keyM.publicKey = publicKey.toString();
-    await keyM.save();
-    return SessionStore.getOrGenerateSession(keyM.publicKey);
+export const shareAESKey = async (participantKey: string, participantID: string, sharer: IUser) => {
+  const participant = await UserModel.findOne({ id: participantID });
+  if (!participant) {
+    return false;
   }
+
+  if (!(await KeyModel.findOne({ participant: participant._id, sharer: sharer._id }))) {
+    const keyMSharer = new KeyModel();
+    keyMSharer.participant = participant._id;
+    keyMSharer.sharer = sharer._id;
+    keyMSharer.participantKey = participantKey;
+    keyMSharer.save();
+  }
+
+  return true;
 };
 
-export const encrypt = (toEncrypt: string, publicKey: string) => {
-  const foreignKey = new NodeRSA(publicKey, "public");
-  const result = foreignKey.encrypt(toEncrypt, "base64");
-  const keyM = new KeyModel();
-  keyM.publicKey = publicKey.toString();
-  keyM.save();
-  return result;
-};
-
-export const decrypt = (toDecrypt: string) => {
-  return ownKeys.decrypt(toDecrypt, "utf8");
+export const getParticipantKeys = async (_id: Schema.Types.ObjectId) => {
+  const keys = await KeyModel.find({ participant: _id }).populate("sharer");
+  if (keys) {
+    return keys.map((item) => ({ sharerId: (item.sharer as IUser).id, aesKey: item.participantKey }));
+  } else {
+    return [];
+  }
 };

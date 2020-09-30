@@ -1,26 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import Container from 'react-bootstrap/Container';
 
-import { Communication } from './background/communication';
-import { MSG, StatusPayload } from './background/types';
-
-const onChangeInput = () => {
-  const val = (document.getElementById("onoffStatus") as HTMLInputElement).checked;
-  Communication.sendMessage(MSG.ONOFF, { status: val });
-};
+import { EnableEncryption } from './components/EnableEncryption/EnableEncryption';
+import { SharerInput } from './components/ShareInput/ShareInput';
+import { UserInfo } from './components/UserInfo/UserInfo';
 
 function App() {
-  useEffect(() => {
-    Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
-      (document.getElementById("onoffStatus") as HTMLInputElement).checked = data.status;
-    });
-  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <label>An/Aus encryption</label>
-        <input id="onoffStatus" onClick={onChangeInput} value="" type="checkbox" />
-      </header>
-    </div>
+    <Container>
+      <br />
+      <UserInfo />
+      <EnableEncryption />
+      <br />
+      <SharerInput />
+    </Container>
   );
 }
 

@@ -8,7 +8,7 @@
     "default_icon": "logo.png",
     "default_popup": "index.html"
   },
-  "background": { "page": "index.html" },
+  "background": { "page": "index.html", "persistent": true },
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],

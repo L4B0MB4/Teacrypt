@@ -4,8 +4,8 @@ import * as controller from './controller';
 
 export const keyExchangeRouter = express.Router();
 
-keyExchangeRouter.get("/public-key", controller.getPublicKey);
+keyExchangeRouter.post("/sharekey", controller.shareAESKeyValidation, controller.shareAESKey);
 
-keyExchangeRouter.post("/authenticate", controller.authenticateValidation, controller.authenticate);
+keyExchangeRouter.get("/:userId/publicKey", controller.getPublicKeyValidation, controller.getPublicKey);
 
-keyExchangeRouter.post("/decrypt", controller.decryptValidation, controller.decrypt);
+keyExchangeRouter.get("/participantkeys", controller.getParticipantKeys);

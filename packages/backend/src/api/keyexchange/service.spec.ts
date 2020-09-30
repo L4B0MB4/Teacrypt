@@ -1,20 +1,33 @@
-import NodeRSA from "node-rsa";
+import mockingoose from 'mockingoose';
+import { mongo, Schema } from 'mongoose';
 
-import * as Service from "./service";
+import { IUser, UserModel } from '../authentication/model';
+import { KeyModel } from './model';
+import * as Service from './service';
 
-describe("Keyexchange Service", () => {
-  it("encryption should generate same results", () => {
-    const keys = new NodeRSA({ b: 512 });
-    const encrypted = Service.encrypt("hello", keys.exportKey("public"));
-    const decrypted = keys.decrypt(encrypted, "utf8");
-    expect(decrypted).toBe("hello");
+beforeAll(() => {
+  mockingoose(KeyModel);
+  mockingoose(UserModel);
+});
+beforeEach(() => {
+  mockingoose(KeyModel).reset();
+  mockingoose(UserModel).reset();
+});
+
+describe("KeyExchange Service", () => {
+  it("sharing a aes key", async () => {
+    mockingoose(UserModel).toReturn({ _id: "p_Id" }, "findOne");
+    const result = await Service.shareAESKey("pKey", "pId", { _id: new mongo.ObjectID() } as IUser);
+    expect(result).toBe(true);
   });
-  it("should decrypt encrypted data", () => {
-    const keys = new NodeRSA({ b: 512 });
-    const publicKey = Service.getPublicKey();
-    expect(publicKey).not.toBeFalsy();
-    keys.importKey(publicKey, "public");
-    const encrypted = keys.encrypt("hello", "base64");
-    expect(Service.decrypt(encrypted)).toBe("hello");
+
+  it("getting participant keys", async () => {
+    KeyModel.schema.path("sharer", Object);
+    mockingoose(KeyModel).toReturn([{ _id: "p_Id", sharer: { id: "xxx" }, participantKey: "myKey" }], "find");
+    let result = await Service.getParticipantKeys(("my_Id" as unknown) as Schema.Types.ObjectId);
+    expect(result).toHaveLength(1);
+    mockingoose(KeyModel).toReturn([], "find");
+    result = await Service.getParticipantKeys(("my_Id" as unknown) as Schema.Types.ObjectId);
+    expect(result).toHaveLength(0);
   });
 });

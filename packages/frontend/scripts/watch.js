@@ -15,6 +15,8 @@ plugins = plugins.filter((plugin) => !(plugin instanceof webpack.HotModuleReplac
 config.entry = entry;
 config.plugins = plugins;
 
+config.devtool = "inline-source-map";
+
 webpack(config).watch({}, (err, stats) => {
   if (err) {
     console.error(err);

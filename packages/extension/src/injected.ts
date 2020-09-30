@@ -1,12 +1,11 @@
-import './encryption/aes';
+import { aesHelper, ComHelp } from '@teacrypt/common';
 
 import { Communication } from './communication/injected/communication';
-import { MSG, StatusPayload } from './communication/types';
-import * as aesHelper from './encryption/aes_helper';
 import Store from './encryption/store';
 import { goOverTeamsChatMessages } from './Teams/teams';
 
 let isActive = false;
+export let ownId: string | undefined;
 
 Store.addKey(aesHelper.STATIC_DEV_KEY_IV, "chatIdent");
 
@@ -42,12 +41,13 @@ const goOverChat = () => {
   if (isActive) {
     goOverTeamsChatMessages();
   }
-  Communication.sendMessage(MSG.ONOFF, { status: isActive });
+  Communication.sendMessage(ComHelp.MSG.ONOFF, { status: isActive });
   setTimeout(goOverChat, 500);
 };
 
 function writeIntoTextbox() {
   console.log("starting mission");
+  getOwnId();
   goOverChat();
   let listenerComplete = textbox.lastListenerInfo.find((item) => item.type === "keydown");
   if (!listenerComplete) {
@@ -58,17 +58,39 @@ function writeIntoTextbox() {
   textbox.removeEventListener("keydown", listener);
 
   textbox.addEventListener("keydown", function (e) {
-    console.log(isActive);
     if (e.key === "Enter" && isActive) {
-      const key = Store.getKey("chatIdent");
+      const key = Store.getKey(ownId);
       if (key) {
-        textbox.innerHTML = aesHelper.encryptSimple(key, textbox.innerText);
+        textbox.innerHTML = aesHelper.encryptSimple(key, textbox.innerText, ownId);
       }
     }
     listener(e);
   });
 }
 
-Communication.addListener(MSG.ONOFF, (data: StatusPayload) => {
+const getOwnId = () => {
+  if (!ownId) {
+    Communication.sendMessage(ComHelp.MSG.GET_OWN_IDENTIFIER);
+    setTimeout(getOwnId, 500);
+  }
+};
+
+Communication.addListener(ComHelp.MSG.ONOFF, (data: ComHelp.StatusPayload) => {
   isActive = data.status;
+});
+
+Communication.addListener(ComHelp.MSG.OWN_IDENTIFIER, (data: ComHelp.OwnIdentifierPayload) => {
+  if (data.id) {
+    ownId = data.id;
+    Store.addKey(data.aesKey, data.id);
+  }
+});
+
+Communication.addListener(ComHelp.MSG.PARICIPANT_KEYS, (data: ComHelp.ParticipantKeysPayload) => {
+  console.log(data);
+  if (data && data.length) {
+    data.forEach((item) => {
+      Store.addKey(item.aesKey, item.id);
+    });
+  }
 });
