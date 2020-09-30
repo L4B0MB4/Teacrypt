@@ -5,7 +5,7 @@ import Alert from 'react-bootstrap/Alert';
 import { Communication } from '../../background/communication';
 import { AuthenticationHandler } from '../../services/Auth/AuthenticationHandler';
 import { EncryptionHandler } from '../../services/Encryption/EncryptionHandler';
-import { KeyEchangeHandler } from '../../services/KeyExchange/KeyExchangeHandler';
+import { KeyExchangeHandler } from '../../services/KeyExchange/KeyExchangeHandler';
 
 export const UserInfo = () => {
   const [userId, setUserId] = useState<string | undefined>();
@@ -15,7 +15,7 @@ export const UserInfo = () => {
         if (uId) {
           setUserId(uId);
           setInterval(() => {
-            KeyEchangeHandler.getParticipantKeys().then(() => {
+            KeyExchangeHandler.getParticipantKeys().then(() => {
               Communication.sendMessage(ComHelp.MSG.PARICIPANT_KEYS, EncryptionHandler.getAllParticipantAesKeys());
             });
           }, 5000);

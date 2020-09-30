@@ -6,9 +6,6 @@ class KeyEchangeHandlerC {
   PATH = "/keyexchange";
 
   share = async (userShare: string) => {
-    if (!userShare) {
-      return;
-    }
     if (!AuthenticationHandler.userId) return;
     const res = await requestAPI<{ publicKey: string }>("GET", `${this.PATH}/${userShare}/publicKey`);
     if (!res?.publicKey) {
@@ -31,20 +28,18 @@ class KeyEchangeHandlerC {
   getParticipantKeys = async () => {
     const res = await requestAPI<Array<{ sharerId: string; aesKey: string }>>("Get", this.PATH + `/participantkeys`);
     if (res) {
-      if (res.length) {
-        res.forEach((item) => {
-          try {
-            const aes = EncryptionHandler.decrypt(item.aesKey);
-            EncryptionHandler.addAesKey(item.sharerId, aes);
-          } catch (ex) {
-            console.error(ex);
-          }
-        });
-      }
+      res.forEach((item) => {
+        try {
+          const aes = EncryptionHandler.decrypt(item.aesKey);
+          EncryptionHandler.addAesKey(item.sharerId, aes);
+        } catch (ex) {
+          console.error(ex);
+        }
+      });
     } else {
       throw new Error("Problem while getting participant keys");
     }
   };
 }
 
-export const KeyEchangeHandler = new KeyEchangeHandlerC();
+export const KeyExchangeHandler = new KeyEchangeHandlerC();
