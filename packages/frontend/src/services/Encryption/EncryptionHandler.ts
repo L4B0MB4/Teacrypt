@@ -6,6 +6,15 @@ class EncryptionHandlerC {
 
   private userKeys: Array<{ id: string; publicKey?: NodeRSA.Key; aes?: string }> = [];
 
+  _getOwnRSAKeys = () => {
+    return this.rsaKey;
+  };
+  _getServerRSAKey = () => {
+    return this.serverRsa;
+  };
+  _getUserKeys = () => {
+    return this.userKeys;
+  };
   createNewRSA = () => {
     this.rsaKey = new NodeRSA({ b: 2048 });
   };
@@ -19,7 +28,6 @@ class EncryptionHandlerC {
         if (!found) {
           this.userKeys.push({ id: userId, publicKey: key });
         } else {
-          /*ToDo: Test ! */
           found.publicKey = key;
         }
       }
@@ -48,7 +56,7 @@ class EncryptionHandlerC {
           tempRSA.importKey(found.publicKey, "public");
           return tempRSA.encrypt(toEncrypt, "base64");
         } else {
-          throw new Error("Not implemented yet");
+          throw new Error("Not encryption key found");
         }
       }
     }

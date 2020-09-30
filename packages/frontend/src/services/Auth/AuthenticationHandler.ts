@@ -1,7 +1,7 @@
 import { requestAPI } from '../API/APIService';
 import { EncryptionHandler } from '../Encryption/EncryptionHandler';
 
-class AuthenticationHandlerC {
+export class AuthenticationHandlerC {
   userId?: string;
   PATH = "/authentication";
   constructor() {
