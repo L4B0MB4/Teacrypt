@@ -8,14 +8,13 @@ import { ApiRouter } from './api/route';
 import { generateId } from './utils/session';
 
 dotenv.config({ path: path.resolve(path.join(process.cwd(), "/config/"), ".env") });
-console.log(process.env);
 mongoose.connect(process.env.MONGODB_SRV, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
   console.log("Connected to mongodb");
-  const port = 3000;
+  const port = process.env.PORT || 3000;
 
   const app = express();
   app.use(
