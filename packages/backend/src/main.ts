@@ -8,6 +8,7 @@ import { ApiRouter } from './api/route';
 import { generateId } from './utils/session';
 
 dotenv.config({ path: path.resolve(path.join(process.cwd(), "/config/"), ".env") });
+console.log(process.env);
 mongoose.connect(process.env.MONGODB_SRV, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
