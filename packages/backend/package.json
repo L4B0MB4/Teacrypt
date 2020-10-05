@@ -9,6 +9,7 @@
     "start-webpack": "webpack --config webpack.config.js --watch --mode development",
     "start-dev": "nodemon build/main.js",
     "build": "webpack --config webpack.config.js --mode production",
+    "build-production": "webpack --config webpack.config.js --mode production",
     "test": "jest --coverage",
     "test-watch": "jest --coverage --watchAll"
   },

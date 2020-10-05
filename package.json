@@ -6,7 +6,8 @@
   "scripts": {
     "start": "lerna run --parallel production",
     "dev": "lerna run --parallel start",
-    "build": "lerna run --parallel build",
+    "build": "lerna run --parallel build-production",
+    "build-all": "lerna run --parallel build",
     "test": "lerna run --parallel test",
     "install": "lerna run --parallel install && lerna run --parallel prepare"
   },
@@ -21,7 +22,7 @@
     "url": "https://github.com/L4B0MB4/Teacrypt/issues"
   },
   "homepage": "https://github.com/L4B0MB4/Teacrypt#readme",
-  "devDependencies": {
+  "dependencies": {
     "lerna": "^3.22.1"
   },
   "workspaces": [
