@@ -22,7 +22,7 @@ export const requestAPI = async <T extends unknown>(
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/api${customPath}`, config);
+    const res = await fetch(`https://teacrypt.herokuapp.com/api${customPath}`, config);
     const data = await res.json();
     return data;
   } catch (err) {
