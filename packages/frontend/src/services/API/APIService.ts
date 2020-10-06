@@ -1,4 +1,6 @@
-import queryString from 'query-string';
+import queryString from "query-string";
+
+const url = process.env.NODE_ENV !== "development" ? "http://localhost:3000" : "https://teacrypt.herokuapp.com";
 
 export const requestAPI = async <T extends unknown>(
   method: string,
@@ -22,7 +24,7 @@ export const requestAPI = async <T extends unknown>(
   }
 
   try {
-    const res = await fetch(`https://teacrypt.herokuapp.com/api${customPath}`, config);
+    const res = await fetch(`${url}/api${customPath}`, config);
     const data = await res.json();
     return data;
   } catch (err) {

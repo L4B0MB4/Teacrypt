@@ -4,9 +4,9 @@
   "description": "## How to use in dev:",
   "private": "true",
   "scripts": {
-    "start": "lerna run --parallel production",
+    "run-server": "lerna run --parallel production",
     "dev": "lerna run --parallel start",
-    "build": "lerna run --parallel build-production",
+    "build-server": "lerna run --parallel build-production",
     "build-all": "lerna run --parallel build",
     "test": "lerna run --parallel test",
     "install": "lerna run --parallel install && lerna run --parallel prepare"

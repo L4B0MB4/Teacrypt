@@ -1,0 +1,1 @@
+web: yarn && yarn build-server && yarn run-server
