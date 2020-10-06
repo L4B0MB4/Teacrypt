@@ -4,6 +4,7 @@
   "description": "## How to use in dev:",
   "scripts": {
     "prepare": "yarn build",
+    "production": "node build/main.js",
     "start": "concurrently \"yarn start-webpack\" \" yarn start-dev\"",
     "start-webpack": "webpack --config webpack.config.js --watch --mode development",
     "start-dev": "nodemon build/main.js",

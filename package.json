@@ -4,6 +4,7 @@
   "description": "## How to use in dev:",
   "private": "true",
   "scripts": {
+    "run-server": "lerna run --parallel production",
     "start": "lerna run --parallel start",
     "build": "lerna run --parallel build",
     "test": "lerna run --parallel test",
@@ -20,7 +21,7 @@
     "url": "https://github.com/L4B0MB4/Teacrypt/issues"
   },
   "homepage": "https://github.com/L4B0MB4/Teacrypt#readme",
-  "devDependencies": {
+  "dependencies": {
     "lerna": "^3.22.1"
   },
   "workspaces": [
