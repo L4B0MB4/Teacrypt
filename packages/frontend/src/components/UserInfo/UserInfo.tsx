@@ -1,11 +1,12 @@
-import { ComHelp } from '@teacrypt/common';
-import React, { useEffect, useState } from 'react';
-import Alert from 'react-bootstrap/Alert';
+import { ComHelp } from "@teacrypt/common";
+import React, { useEffect, useState } from "react";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
-import { Communication } from '../../background/communication';
-import { AuthenticationHandler } from '../../services/Auth/AuthenticationHandler';
-import { EncryptionHandler } from '../../services/Encryption/EncryptionHandler';
-import { KeyExchangeHandler } from '../../services/KeyExchange/KeyExchangeHandler';
+import { Communication } from "../../background/communication";
+import { AuthenticationHandler } from "../../services/Auth/AuthenticationHandler";
+import { EncryptionHandler } from "../../services/Encryption/EncryptionHandler";
+import { KeyExchangeHandler } from "../../services/KeyExchange/KeyExchangeHandler";
 
 export const UserInfo = () => {
   const [userId, setUserId] = useState<string | undefined>();
@@ -33,14 +34,16 @@ export const UserInfo = () => {
   }, [userId]);
 
   return (
-    <>
-      {userId && (
-        <>
-          <Alert variant={"primary"}>
-            <Alert.Heading className="text-center">{userId}</Alert.Heading>
-          </Alert>
-        </>
-      )}
-    </>
+    <Alert variant={"primary"}>
+      <Alert.Heading className="text-center">
+        {userId ? (
+          userId
+        ) : (
+          <Spinner animation="border" role="status">
+            <span className="sr-only">Loading...</span>
+          </Spinner>
+        )}
+      </Alert.Heading>
+    </Alert>
   );
 };
